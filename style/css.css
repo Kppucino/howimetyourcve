@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Arapey');
+body
+{
+	background-image: url("../images/CSSBackground/dark-triangles.png");
+	font-family: 'Arapey 19px', 'Slabo 27px', sans-serif;
+	font-size: 17px;
+	margin-top: 3em;
+	color: white;
+}
