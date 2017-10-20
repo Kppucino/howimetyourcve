@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<<<<<<< HEAD
     <title>My Phonograph</title>
     <meta name=viewport content="width=device-width, initial-scale=1">
 
@@ -28,6 +29,17 @@
 	<meta name="msapplication-TileColor" content="#ffffff">
 	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<meta name="theme-color" content="#ffffff">
+=======
+    <title>HIMYCVE</title>
+    <meta name=viewport content="width=device-width, initial-scale=1">
+
+	<link href="https://fonts.googleapis.com/css?family=Sansita" rel="stylesheet">
+	<link href="style/materialize/css/materialize.min.css" rel="stylesheet" type="text/css" media="screen"/>
+	<link href="style/css.css" rel="stylesheet" media="screen">
+
+	<script src="jquery-1.12.4.js"></script>
+	<script src="style/materialize/js/materialize.min.js"></script>
+>>>>>>> b875e9ad5df5d6d987f0c73e5224299994958af3
 
  	<?php
  		include("fonctions.php");
@@ -35,6 +47,7 @@
  	?>
 </head>
 <header>
+<<<<<<< HEAD
 	<div class="navbar navbar-default navbar-tt navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -117,3 +130,6 @@
         });
     });
 </script>
+=======
+</header>
+>>>>>>> b875e9ad5df5d6d987f0c73e5224299994958af3
