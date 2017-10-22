@@ -7,10 +7,12 @@
 	<link href="https://fonts.googleapis.com/css?family=Sansita" rel="stylesheet">
   <link href="style/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet" type="text/css" media="screen"/>
 	<link href="style/styles.css" rel="stylesheet" media="screen">
+  <link rel="icon" href="images/logo/favicon.ico">
 
 	<script src="jquery-1.12.4.js"></script>
   <script src="style/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
 	<script src="multiselectScript.js"></script>
+
 
  	<?php
  		include("include/include.php");
