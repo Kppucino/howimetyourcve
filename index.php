@@ -105,13 +105,16 @@
 							    </div>
 								</div>
 							</div>
-							<div class="col-md-offset-1 col-md-1">
-								<div class="btn-group buttonFiltre">
+							<div class="col-md-1">
+								<div class="buttonFiltre">
 									<button class="btn btn-default"><i class="glyphicon glyphicon-filter"></i></button>
 								</div>
 							</div>
+							<div class="row">
+									<button class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i></button>
+									<button class="btn btn-default"><i class="glyphicon glyphicon-chevron-right"></i></button>
+								</div>
 						</div>
-
 						<div class="table-container">
 							<table class="table table-filter">
 							</table>
@@ -120,7 +123,11 @@
 				</div>
 			</div>
 		</div>
+		<?php
+			include("footer.php");
+		?>
 </body>
+
 <script type="text/javascript">
 	$(function() {
 	    $('.multiselect-ui').multiselect({
