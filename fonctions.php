@@ -87,24 +87,7 @@
 		include("include/_inc_parametres.php");
 		include("include/_inc_connexion.php");
 
-		$ok = true;
-
-		for ($i=0; $i < sizeof($array); $i++)
-		{
-				if (!is_int($array[$i]))
-				{
-						$ok = false;
-				}
-		}
-
-		if ($ok == true)
-		{
-				return $cnx->query(str_replace($nomColonne, implode(",", $array), $query))->fetchAll(PDO::FETCH_ASSOC);
-		}
-		else
-		{
-				return "erreur";
-		}
+		return $cnx->query(str_replace($nomColonne, implode(",", $array), $query))->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	function queryFetchWith2ArrayValue($query, $nomColonne1, $array1, $nomColonne2, $array2)
@@ -112,32 +95,7 @@
 		include("include/_inc_parametres.php");
 		include("include/_inc_connexion.php");
 
-		$ok = true;
-
-		for ($i=0; $i < sizeof($array1); $i++)
-		{
-				if (!is_int($array1[$i]))
-				{
-						$ok = false;
-				}
-		}
-
-		for ($i=0; $i < sizeof($array2); $i++)
-		{
-				if (!is_int($array2[$i]))
-				{
-						$ok = false;
-				}
-		}
-
-		if ($ok == true)
-		{
-				return $cnx->query(str_replace($nomColonne1, implode(",", $array1), str_replace($nomColonne2, implode(",", $array2), $query)))->fetchAll(PDO::FETCH_ASSOC);
-		}
-		else
-		{
-				return "erreur";
-		}
+		return $cnx->query(str_replace($nomColonne2, implode(",", $array2), str_replace($nomColonne1, implode(",", $array1), $query)))->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	function queryFetchWith1ArrayAnd1Value($query, $nomColonne1, $array, $nomColonne2, $value)
@@ -145,29 +103,12 @@
 		include("include/_inc_parametres.php");
 		include("include/_inc_connexion.php");
 
-		$ok = true;
+		$query = str_replace($nomColonne1, implode(",", $array), $query);
 
-		for ($i=0; $i < sizeof($array); $i++)
-		{
-				if (!is_int($array[$i]))
-				{
-						$ok = false;
-				}
-		}
-
-		if (!is_int($value))
-		{
-				$ok = false;
-		}
-
-		if ($ok == true)
-		{
-				return $cnx->query(str_replace($nomColonne2, implode(",", $value), str_replace($nomColonne, implode(",", $array), $query)))->fetchAll(PDO::FETCH_ASSOC);
-		}
-		else
-		{
-				return "erreur";
-		}
+		$query_preparation = $cnx->prepare($query);
+		$query_preparation->bindValue($nomColonne2, $value, PDO::PARAM_INT);
+		$query_preparation->execute();
+		return $query_preparation->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	function queryFetchWith2ArrayAnd1Value($query, $nomColonne1, $array1, $nomColonne2, $array2, $nomColonne3, $value)
@@ -175,39 +116,13 @@
 		include("include/_inc_parametres.php");
 		include("include/_inc_connexion.php");
 
-		$ok = true;
+		$query = str_replace($nomColonne2, implode(",", $array2), str_replace($nomColonne1, implode(",", $array1), $query));
 
-		for ($i=0; $i < sizeof($array1); $i++)
-		{
-				if (!is_int($array1[$i]))
-				{
-						$ok = false;
-				}
-		}
-
-		for ($i=0; $i < sizeof($array2); $i++)
-		{
-				if (!is_int($array2[$i]))
-				{
-						$ok = false;
-				}
-		}
-
-		if (!is_int($value))
-		{
-				$ok = false;
-		}
-
-		if ($ok == true)
-		{
-				return $cnx->query(str_replace($nomColonne3, implode(",", $value), str_replace($nomColonne2, implode(",", $array2), str_replace($nomColonne1, implode(",", $array1), $query))))->fetchAll(PDO::FETCH_ASSOC);
-		}
-		else
-		{
-				return "erreur";
-		}
+		$query_preparation = $cnx->prepare($query);
+		$query_preparation->bindValue($nomColonne3, $value, PDO::PARAM_INT);
+		$query_preparation->execute();
+		return $query_preparation->fetchAll(PDO::FETCH_ASSOC);
 	}
-
 
 	function queryExecuteWithoutValue($query, $lastInsertId)
 	{
@@ -577,7 +492,18 @@
 			}
 			else if (empty($editeur) && empty($faille) && !empty($status))
 			{
-				$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithStatus, ":statusCve", $status);
+				if ($status == "all")
+				{
+					$listCVE = queryFetchWithoutValue($queryGetAllCVEWithEditor);
+				}
+				else if ($status == "open")
+				{
+					$listCVE = queryFetchWith1Value($queryGetAllCVEWithStatus, ":statusCve", 1);
+				}
+				else if ($status == "close")
+				{
+					$listCVE = queryFetchWith1Value($queryGetAllCVEWithStatus, ":statusCve", 0);
+				}
 			}
 			else if (!empty($editeur) && !empty($faille) && empty($status))
 			{
@@ -585,34 +511,58 @@
 			}
 			else if (!empty($editeur) && empty($faille) && !empty($status))
 			{
-				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", $status);
+				if ($status == "all")
+				{
+					$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
+				}
+				else if ($status == "open")
+				{
+					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1);
+				}
+				else if ($status == "close")
+				{
+					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0);
+				}
 			}
 			else if (empty($editeur) && !empty($faille) && !empty($status))
 			{
-				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $editeur, ":statusCve", $status);
+				if ($status == "all")
+				{
+					$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
+				}
+				else if ($status == "open")
+				{
+					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $editeur, ":statusCve", 1);
+				}
+				else if ($status == "close")
+				{
+					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $editeur, ":statusCve", 0);
+				}
 			}
 			else if (!empty($editeur) && !empty($faille) && !empty($status))
 			{
-				$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", $status);
+				if ($status == "all")
+				{
+					$listCVE = queryFetchWith2ArrayValue($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
+				}
+				else if ($status == "open")
+				{
+					$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 1);
+				}
+				else if ($status == "close")
+				{
+					$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0);
+				}
 			}
 
-			var_dump($listCVE);
-
-			if (isset($listCVE) && $listCVE != "erreur")
-			{
-				createListCVE($listCVE);
-			}
-			else
-			{
-				return "erreur";
-			}
+			createListCVE($listCVE);
 	}
 
 	function createListCVE($listCVE)
 	{
 		echo '<tbody>';
 
-		if ($listCVE == "erreur")
+		if (empty($listCVE) || $listCVE == "erreur")
 		{
 				echo '<tr data-status="">';
 				echo '<td>';
@@ -626,11 +576,6 @@
 				echo '<p class="summary"></p>';
 				echo '</div>';
 				echo '</div>';
-				echo '<td>';
-				echo '<a href="javascript:;" class="star">';
-				echo '<i class="glyphicon glyphicon-star"></i>';
-				echo '</a>';
-				echo '</td>';
 				echo '</td>';
 				echo '</tr>';
 		}
