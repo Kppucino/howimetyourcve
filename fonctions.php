@@ -82,6 +82,94 @@
 		return $result;
 	}
 
+	function queryFetchWith1ArrayValue($query, $nomColonne, $array)
+	{
+		include("include/_inc_parametres.php");
+		include("include/_inc_connexion.php");
+
+		$ok = true;
+
+		for ($i=0; $i < sizeof($array); $i++)
+		{
+				if (!is_int($array[$i]))
+				{
+						$ok = false;
+				}
+		}
+
+		if ($ok == true)
+		{
+				return $cnx->query(str_replace($nomColonne, implode(",", $array), $query))->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else
+		{
+				return "erreur";
+		}
+	}
+
+	function queryFetchWith2ArrayValue($query, $nomColonne1, $array1, $nomColonne2, $array2)
+	{
+		include("include/_inc_parametres.php");
+		include("include/_inc_connexion.php");
+
+		$ok = true;
+
+		for ($i=0; $i < sizeof($array1); $i++)
+		{
+				if (!is_int($array1[$i]))
+				{
+						$ok = false;
+				}
+		}
+
+		for ($i=0; $i < sizeof($array2); $i++)
+		{
+				if (!is_int($array2[$i]))
+				{
+						$ok = false;
+				}
+		}
+
+		if ($ok == true)
+		{
+				return $cnx->query(str_replace($nomColonne1, implode(",", $array1), str_replace($nomColonne2, implode(",", $array2), $query)))->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else
+		{
+				return "erreur";
+		}
+	}
+
+	function queryFetchWith1ArrayAnd1Value($query, $nomColonne1, $array, $nomColonne2, $value)
+	{
+		include("include/_inc_parametres.php");
+		include("include/_inc_connexion.php");
+
+		$ok = true;
+
+		for ($i=0; $i < sizeof($array); $i++)
+		{
+				if (!is_int($array[$i]))
+				{
+						$ok = false;
+				}
+		}
+
+		if (!is_int($value))
+		{
+				$ok = false;
+		}
+
+		if ($ok == true)
+		{
+				return $cnx->query(str_replace($nomColonne2, implode(",", $value), str_replace($nomColonne, implode(",", $array), $query)))->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else
+		{
+				return "erreur";
+		}
+	}
+
 	function queryExecuteWithoutValue($query, $lastInsertId)
 	{
 		include("include/_inc_parametres.php");
@@ -430,5 +518,46 @@
 	    $str = preg_replace('#&[^;]+;#', '', $str); // supprime les autres caractères
 
 	    return $str;
+	}
+
+	function getListCVE($editeur, $faille, $status, $orderBy)
+	{
+			include("SQLQuery.php");
+
+			if (empty($editeur) && empty($faille) && empty($status))
+			{
+				$listCVE = queryFetchWithoutValue($queryGetAllCVEWithEditor);
+			}
+			else if (!empty($editeur) && empty($faille) && empty($status))
+			{
+				$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
+			}
+			else if (empty($editeur) && !empty($faille) && empty($status))
+			{
+				$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
+			}
+			else if (empty($editeur) && empty($faille) && !empty($status))
+			{
+				$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithStatus, ":statusCve", $status);
+			}
+			else if (!empty($editeur) && !empty($faille) && empty($status))
+			{
+				$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
+			}
+			else if (!empty($editeur) && empty($faille) && !empty($status))
+			{
+				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", $status);
+			}
+			else if (empty($editeur) && !empty($faille) && !empty($status))
+			{
+				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", $status);
+			}
+
+				return $listCVE;
+	}
+
+	function createListCVE()
+	{
+
 	}
 ?>

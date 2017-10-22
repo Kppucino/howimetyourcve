@@ -9,5 +9,5 @@ $HOTE = "localhost";	// nom du serveur de données : localhost ou serv-wamp1 ou 
 $PORT = '3306';			// numéro du port
 $USER = "root";			// nom de l'utilisateur
 $PWD  = "";				// son mot de passe
-$BDD  = "myphonograph";		// nom de la base de données
+$BDD  = "howimetyourcve";		// nom de la base de données
 ?>

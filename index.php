@@ -34,7 +34,14 @@
 							    <label class="col-md-3 control-label" for="rolename">Editeur</label>
 							    <div class="col-md-5">
 							        <select id="dates-field2" class="multiselect-ui form-control" multiple="multiple">
-							            <option value="cheese">Cheese</option>
+													<?php
+															$listEditor = queryFetchWithoutValue($queryGetEditeur);
+
+															for ($i=0; $i < sizeof($listEditor); $i++)
+        											{
+																	echo '<option value='.$listEditor[$i]["idEditeur"].'>'.$listEditor[$i]["nomEditeur"].'</option>';
+															}
+													 ?>
 							        </select>
 							    </div>
 								</div>
@@ -44,7 +51,14 @@
 							    <label class="col-md-3 control-label" for="rolename">Faille</label>
 							    <div class="col-md-5">
 							        <select id="dates-field2" class="multiselect-ui form-control" multiple="multiple">
-							            <option value="cheese">Cheese</option>
+												<?php
+														$listFaille = queryFetchWithoutValue($queryGetFaille);
+
+														for ($i=0; $i < sizeof($listFaille); $i++)
+														{
+																echo '<option value='.$listFaille[$i]["idFaille"].'>'.$listFaille[$i]["nomFaille"].'</option>';
+														}
+												 ?>
 							        </select>
 							    </div>
 								</div>
@@ -56,32 +70,68 @@
 									<button type="button" class="btn btn-default btn-filter" data-target="all">Tous</button>
 								</div>
 							</div>
+							<div class="col-md-1">
+								<div class="btn-group">
+									<button class="btn btn-default"><i class="glyphicon glyphicon-filter"></i></button>
+								</div>
+							</div>
 						</div>
+
 						<div class="table-container">
 							<table class="table table-filter">
 								<tbody>
-									<tr data-status="open">
-										<td>
-											<div class="media">
-												<a href="#" class="pull-left">
-													<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
-												</a>
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right pagado">Ouvert</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-											<td>
-												<a href="javascript:;" class="star">
-													<i class="glyphicon glyphicon-star"></i>
-												</a>
-											</td>
-										</td>
-									</tr>
+
+									<?php
+											$listCVE = queryFetchWithoutValue($queryGetAllCVEWithEditor);
+
+											for ($i=0; $i < sizeof($listCVE); $i++)
+											{
+													if ($listCVE[$i]["statusCve"] == 1)
+													{
+															echo '<tr data-status="open">';
+													}
+													else
+													{
+															echo '<tr data-status="close">';
+													}
+
+													echo '<td>';
+													echo '<div class="media">';
+
+													if (isset($listCVE[$i]["logoEditeur"]))
+													{
+															echo '<a href="" class="pull-left">';
+															echo '<img src="images/logoEditeur/'.$listCVE[$i]["logoEditeur"].'" class="media-photo">';
+															echo '</a>';
+													}
+
+													echo '<div class="media-body">';
+													echo '<span class="media-meta pull-right">'.$listCVE[$i]["dateCve"].'</span>';
+													echo '<h4 class="title">';
+													echo $listCVE[$i]["nomCve"];
+
+													if ($listCVE[$i]["statusCve"] == 1)
+													{
+															echo '<span class="pull-right pagado">Ouvert</span>';
+													}
+													else
+													{
+															echo '<span class="pull-right cancelado">Fermé</span>';
+													}
+
+													echo '</h4>';
+													echo '<p class="summary">'.substr($listCVE[$i]["descriptionCve"], 0, 100).'</p>';
+													echo '</div>';
+													echo '</div>';
+													echo '<td>';
+													echo '<a href="javascript:;" class="star">';
+													echo '<i class="glyphicon glyphicon-star"></i>';
+													echo '</a>';
+													echo '</td>';
+													echo '</td>';
+													echo '</tr>';
+											}
+									 ?>
 								</tbody>
 							</table>
 						</div>
