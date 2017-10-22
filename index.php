@@ -15,25 +15,11 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="filtre">
-							<div class="col-md-1">
-								<div class="dropdown-holder">
-									<div class="dropdown">
-								  	<button class="btn btn-default btn-city dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-								   		Trier par
-								    	<span class="caret caret-search"></span>
-								  	</button>
-									  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-									    <li><a href="#">Alphabétique</a></li>
-									    <li><a href="#">Date</a></li>
-									  </ul>
-									</div>
-								</div>
-							</div>
 							<div class="col-md-3">
 								<div class="form-group">
 							    <label class="col-md-3 control-label" for="rolename">Editeur</label>
 							    <div class="col-md-5">
-							        <select id="dates-field2" class="multiselect-ui form-control" multiple="multiple">
+							        <select id="listEditor" class="multiselect-ui form-control" multiple="multiple">
 													<?php
 															$listEditor = queryFetchWithoutValue($queryGetEditeur);
 
@@ -50,7 +36,7 @@
 								<div class="form-group">
 							    <label class="col-md-3 control-label" for="rolename">Faille</label>
 							    <div class="col-md-5">
-							        <select id="dates-field2" class="multiselect-ui form-control" multiple="multiple">
+							        <select id="listFaille" class="multiselect-ui form-control" multiple="multiple">
 												<?php
 														$listFaille = queryFetchWithoutValue($queryGetFaille);
 
@@ -64,14 +50,19 @@
 								</div>
 							</div>
 							<div class="col-md-3">
-								<div class="btn-group">
-									<button type="button" class="btn btn-success btn-filter" data-target="open">Ouvert</button>
-									<button type="button" class="btn btn-danger btn-filter" data-target="close">Fermé</button>
-									<button type="button" class="btn btn-default btn-filter" data-target="all">Tous</button>
+								<div class="form-group">
+							    <label class="col-md-3 control-label" for="rolename">Status</label>
+							    <div class="col-md-5">
+							        <select id="listStatus" class="multiselect-ui form-control">
+												<option value="all">Toutes</option>
+												<option value="open">Ouvertes</option>
+												<option value="close">Fermées</option>
+							        </select>
+							    </div>
 								</div>
 							</div>
-							<div class="col-md-1">
-								<div class="btn-group">
+							<div class="col-md-offset-1 col-md-1">
+								<div class="btn-group buttonFiltre">
 									<button class="btn btn-default"><i class="glyphicon glyphicon-filter"></i></button>
 								</div>
 							</div>
@@ -79,60 +70,6 @@
 
 						<div class="table-container">
 							<table class="table table-filter">
-								<tbody>
-
-									<?php
-											$listCVE = queryFetchWithoutValue($queryGetAllCVEWithEditor);
-
-											for ($i=0; $i < sizeof($listCVE); $i++)
-											{
-													if ($listCVE[$i]["statusCve"] == 1)
-													{
-															echo '<tr data-status="open">';
-													}
-													else
-													{
-															echo '<tr data-status="close">';
-													}
-
-													echo '<td>';
-													echo '<div class="media">';
-
-													if (isset($listCVE[$i]["logoEditeur"]))
-													{
-															echo '<a href="" class="pull-left">';
-															echo '<img src="images/logoEditeur/'.$listCVE[$i]["logoEditeur"].'" class="media-photo">';
-															echo '</a>';
-													}
-
-													echo '<div class="media-body">';
-													echo '<span class="media-meta pull-right">'.$listCVE[$i]["dateCve"].'</span>';
-													echo '<h4 class="title">';
-													echo $listCVE[$i]["nomCve"];
-
-													if ($listCVE[$i]["statusCve"] == 1)
-													{
-															echo '<span class="pull-right pagado">Ouvert</span>';
-													}
-													else
-													{
-															echo '<span class="pull-right cancelado">Fermé</span>';
-													}
-
-													echo '</h4>';
-													echo '<p class="summary">'.substr($listCVE[$i]["descriptionCve"], 0, 100).'</p>';
-													echo '</div>';
-													echo '</div>';
-													echo '<td>';
-													echo '<a href="javascript:;" class="star">';
-													echo '<i class="glyphicon glyphicon-star"></i>';
-													echo '</a>';
-													echo '</td>';
-													echo '</td>';
-													echo '</tr>';
-											}
-									 ?>
-								</tbody>
 							</table>
 						</div>
 					</div>
@@ -153,19 +90,50 @@
 	      $(this).toggleClass('star-checked');
 	    });
 
-	    $('.ckbox label').on('click', function () {
-	      $(this).parents('tr').toggleClass('selected');
-	    });
+		$.ajax({
+				url: "ajax.php",
+				type : 'POST',
+				data : "createTable=empty",
 
-	    $('.btn-filter').on('click', function () {
-	      var $target = $(this).data('target');
-	      if ($target != 'all') {
-	        $('.table tr').css('display', 'none');
-	        $('.table tr[data-status="' + $target + '"]').fadeIn('slow');
-	      } else {
-	        $('.table tr').css('display', 'none').fadeIn('slow');
-	      }
-	    });
+				success : function(result)
+				{
+						$('.table-filter').html(result);
+				}
+		});
 	 });
+
+	$('.buttonFiltre').on('click', function()
+	{
+	    if ($('select[id="listEditor"] > option:selected').val())
+	    {
+				var editeur = new Array();
+
+				$('select[id="listEditor"] > option:selected').each(function()
+				{
+					editeur.push($(this).val());
+				});
+	    }
+
+			if ($('select[id="listFaille"] > option:selected').val())
+	    {
+				var faille = new Array();
+
+				$('select[id="listFaille"] > option:selected').each(function()
+				{
+					faille.push($(this).val());
+				});
+	    }
+
+	    $.ajax({
+	        url: "ajax.php",
+	        type : 'POST',
+	        data : {'createTable':1,'editeur':JSON.stringify(editeur),'faille':JSON.stringify(faille), 'status':$('select[id="listStatus"] > option:selected').val()},
+
+	        success : function(result)
+	        {
+	            $('.table-filter').html(result);
+	        }
+	    });
+	});
 </script>
 </html>

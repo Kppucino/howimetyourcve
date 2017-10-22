@@ -170,6 +170,45 @@
 		}
 	}
 
+	function queryFetchWith2ArrayAnd1Value($query, $nomColonne1, $array1, $nomColonne2, $array2, $nomColonne3, $value)
+	{
+		include("include/_inc_parametres.php");
+		include("include/_inc_connexion.php");
+
+		$ok = true;
+
+		for ($i=0; $i < sizeof($array1); $i++)
+		{
+				if (!is_int($array1[$i]))
+				{
+						$ok = false;
+				}
+		}
+
+		for ($i=0; $i < sizeof($array2); $i++)
+		{
+				if (!is_int($array2[$i]))
+				{
+						$ok = false;
+				}
+		}
+
+		if (!is_int($value))
+		{
+				$ok = false;
+		}
+
+		if ($ok == true)
+		{
+				return $cnx->query(str_replace($nomColonne3, implode(",", $value), str_replace($nomColonne2, implode(",", $array2), str_replace($nomColonne1, implode(",", $array1), $query))))->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else
+		{
+				return "erreur";
+		}
+	}
+
+
 	function queryExecuteWithoutValue($query, $lastInsertId)
 	{
 		include("include/_inc_parametres.php");
@@ -520,7 +559,7 @@
 	    return $str;
 	}
 
-	function getListCVE($editeur, $faille, $status, $orderBy)
+	function getListCVE($editeur, $faille, $status)
 	{
 			include("SQLQuery.php");
 
@@ -550,14 +589,101 @@
 			}
 			else if (empty($editeur) && !empty($faille) && !empty($status))
 			{
-				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", $status);
+				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $editeur, ":statusCve", $status);
+			}
+			else if (!empty($editeur) && !empty($faille) && !empty($status))
+			{
+				$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", $status);
 			}
 
-				return $listCVE;
+			var_dump($listCVE);
+
+			if (isset($listCVE) && $listCVE != "erreur")
+			{
+				createListCVE($listCVE);
+			}
+			else
+			{
+				return "erreur";
+			}
 	}
 
-	function createListCVE()
+	function createListCVE($listCVE)
 	{
+		echo '<tbody>';
 
+		if ($listCVE == "erreur")
+		{
+				echo '<tr data-status="">';
+				echo '<td>';
+				echo '<div class="media">';
+				echo '<div class="media-body">';
+				echo '<span class="media-meta pull-right"></span>';
+				echo '<h4 class="title">';
+				echo 'Aucun résultat à afficher';
+				echo '<span class="pull-right pagado"></span>';
+				echo '</h4>';
+				echo '<p class="summary"></p>';
+				echo '</div>';
+				echo '</div>';
+				echo '<td>';
+				echo '<a href="javascript:;" class="star">';
+				echo '<i class="glyphicon glyphicon-star"></i>';
+				echo '</a>';
+				echo '</td>';
+				echo '</td>';
+				echo '</tr>';
+		}
+		else
+		{
+			for ($i=0; $i < sizeof($listCVE); $i++)
+			{
+					if ($listCVE[$i]["statusCve"] == 1)
+					{
+							echo '<tr data-status="open">';
+					}
+					else
+					{
+							echo '<tr data-status="close">';
+					}
+
+					echo '<td>';
+					echo '<div class="media">';
+
+					if (isset($listCVE[$i]["logoEditeur"]))
+					{
+							echo '<a href="" class="pull-left">';
+							echo '<img src="images/logoEditeur/'.$listCVE[$i]["logoEditeur"].'" class="media-photo">';
+							echo '</a>';
+					}
+
+					echo '<div class="media-body">';
+					echo '<span class="media-meta pull-right">'.$listCVE[$i]["dateCve"].'</span>';
+					echo '<h4 class="title">';
+					echo $listCVE[$i]["nomCve"];
+
+					if ($listCVE[$i]["statusCve"] == 1)
+					{
+							echo '<span class="pull-right pagado">Ouvertes</span>';
+					}
+					else
+					{
+							echo '<span class="pull-right cancelado">Fermées</span>';
+					}
+
+					echo '</h4>';
+					echo '<p class="summary">'.substr($listCVE[$i]["descriptionCve"], 0, 100).'</p>';
+					echo '</div>';
+					echo '</div>';
+					echo '<td>';
+					echo '<a href="javascript:;" class="star">';
+					echo '<i class="glyphicon glyphicon-star"></i>';
+					echo '</a>';
+					echo '</td>';
+					echo '</td>';
+					echo '</tr>';
+			}
+		}
+		echo '</tbody>';
 	}
 ?>
