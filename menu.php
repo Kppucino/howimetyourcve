@@ -26,7 +26,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Logo</a>
+      <a class="navbar-brand" href="#"></a>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <div class="col-sm-3 col-md-3">
@@ -41,7 +41,7 @@
       </div>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="index.php">CVE</a></li>
-        <li><a href="#">Présentation</a></li>
+        <li><a href="presentation.php">Présentation</a></li>
         <li><a href="#">Sources</a></li>
         <li><a href="#">Connexion</a></li>
       </ul>

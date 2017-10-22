@@ -2,7 +2,6 @@
 body
 {
 	background-color: #E9EBBE
-	font-family: 'Arapey 19px', 'Slabo 27px', sans-serif;
 	font-size: 17px;
 	margin-top: 1em;
 	color : rgb(119, 119, 119)
@@ -11,7 +10,8 @@ body
 
 .navbar-brand
 {
-	background-image: url('/images/logo/ms-icon-70x70.png');	
+	background-image: url('../images/logo/ms-icon-70x70.png');
+	width: 70px;
 }
 
 .searchIcon
@@ -47,6 +47,7 @@ span.multiselect-native-select select {
 	padding: 0
 }
 .multiselect-container .input-group {
+
 	margin: 5px
 }
 .multiselect-container>li {
