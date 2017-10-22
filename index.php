@@ -8,8 +8,52 @@
 	<div class="container-fluid">
 			<div class="col-md-2 statPanel">
 				<h2>Statistique :</h2>
-				<hr>
+				<div class="statCVE">
+				</div>
 				<h2>Tags :</h2>
+					<?php
+						$editor = queryFetchWithoutValue($queryGetRandEditor);
+						$faille = queryFetchWithoutValue($queryGetRandFaille);
+
+						$compteurCSS = 0;
+
+						for ($i=0; $i < sizeof($editor); $i++)
+						{
+							if ($compteurCSS == 0)
+	            {
+	                echo '<div class="row">';
+	            }
+
+							echo '<a href="editeur.php?idEditeur='.$editor[$i]["idEditeur"].'"><button type="button" class="btn btn-default btn-sm">'.$editor[$i]["nomEditeur"].'</button></a>';
+
+							$compteurCSS ++;
+
+	            if ($compteurCSS == 4)
+	            {
+	                echo '</div>';
+	                $compteurCSS = 0;
+	            }
+						}
+
+						for ($i=0; $i < sizeof($faille); $i++)
+						{
+							if ($compteurCSS == 0)
+	            {
+	                echo '<div class="row">';
+	            }
+
+							echo '<a href="faille.php?idFaille='.$faille[$i]["idFaille"].'"><button type="button" class="btn btn-default btn-sm">'.$faille[$i]["nomFaille"].'</button></a>';
+
+							$compteurCSS ++;
+
+	            if ($compteurCSS == 4)
+	            {
+	                echo '</div>';
+	                $compteurCSS = 0;
+	            }
+						}
+
+					?>
 			</div>
 			<div class="col-md-10">
 				<div class="panel panel-default">
@@ -100,6 +144,17 @@
 						$('.table-filter').html(result);
 				}
 		});
+
+		$.ajax({
+				url: "ajax.php",
+				type : 'POST',
+				data : "createStat=empty",
+
+				success : function(result)
+				{
+						$('.statCVE').html(result);
+				}
+		});
 	 });
 
 	$('.buttonFiltre').on('click', function()
@@ -132,6 +187,17 @@
 	        success : function(result)
 	        {
 	            $('.table-filter').html(result);
+
+							$.ajax({
+					        url: "ajax.php",
+					        type : 'POST',
+					        data : {'createStat':1,'editeur':JSON.stringify(editeur),'faille':JSON.stringify(faille), 'status':$('select[id="listStatus"] > option:selected').val()},
+
+					        success : function(result)
+					        {
+					            $('.statCVE').html(result);
+					        }
+					    });
 	        }
 	    });
 	});

@@ -36,4 +36,38 @@
 			}
 		}
 	}
+	else if (isset($_POST["createStat"]))
+	{
+		if ($_POST["createStat"] == "empty")
+		{
+			return getStatCVE("", "", "");
+		}
+		else
+		{
+			if (isset($_POST['editeur']) && isset($_POST['faille']) && isset($_POST['status']))
+			{
+					return getStatCVE(json_decode($_POST['editeur']), json_decode($_POST['faille']), $_POST['status']);
+			}
+			else if (isset($_POST['editeur']) && isset($_POST['faille']) && !isset($_POST['status']))
+			{
+					return getStatCVE(json_decode($_POST['editeur']), json_decode($_POST['faille']), "");
+			}
+			else if (isset($_POST['editeur']) && !isset($_POST['faille']) && isset($_POST['status']))
+			{
+					return getStatCVE(json_decode($_POST['editeur']), "", $_POST['status']);
+			}
+			else if (!isset($_POST['editeur']) && isset($_POST['faille']) && isset($_POST['status']))
+			{
+					return getStatCVE("", json_decode($_POST['faille']), $_POST['status']);
+			}
+			else if (!isset($_POST['editeur']) && !isset($_POST['faille']) && isset($_POST['status']))
+			{
+					return getStatCVE("", "", $_POST['status']);
+			}
+			else
+			{
+					return getStatCVE("", "", "");
+			}
+		}
+	}
 ?>
