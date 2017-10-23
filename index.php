@@ -111,9 +111,14 @@
 								</div>
 							</div>
 							<div class="row">
+<<<<<<< HEAD
+									<button class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i></button>
+									<button class="btn btn-default"><i class="glyphicon glyphicon-chevron-right"></i></button>
+=======
 									<input type="hidden" value="0" name="page"></input>
 									<button class="btn btn-default previous"><i class="glyphicon glyphicon-chevron-left"></i></button>
 									<button class="btn btn-default next"><i class="glyphicon glyphicon-chevron-right"></i></button>
+>>>>>>> fe65f560a8840cb9f97d9fc609266772b782ef3f
 								</div>
 						</div>
 						<div class="table-container">
