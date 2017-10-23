@@ -150,6 +150,7 @@
 				success : function(result)
 				{
 						$('.table-filter').html(result);
+						$('.previous').prop('disabled', true);
 				}
 		});
 
@@ -240,7 +241,23 @@
 				success : function(result)
 				{
 						$('.table-filter').html(result);
-				   	$('input[type="page"]').val(parseInt($('input[name="page"]').val()-1));
+
+						if ($('.table-filter >tbody >tr').length == 25)
+						{
+								if ($('input[name="page"]').val() == 0)
+								{
+										$('.previous').prop('disabled', true);
+								}
+								else
+								{
+									$('input[name="page"]').val(parseInt($('input[name="page"]').val())-1);
+									$('.next').prop('disabled', false);
+								}
+						}
+						else
+						{
+							$('.previous').prop('disabled', true);
+						}
 				}
 		});
 	});
@@ -275,7 +292,17 @@
 				success : function(result)
 				{
 						$('.table-filter').html(result);
-						$('input[type="page"]').val(parseInt($('input[name="page"]').val()+1));
+
+						if ($('.table-filter >tbody >tr').length == 25)
+						{
+							$('input[name="page"]').val(parseInt($('input[name="page"]').val())+1);
+							$('.previous').prop('disabled', false);
+							$('.next').prop('disabled', false);
+						}
+						else
+						{
+							$('.next').prop('disabled', true);
+						}
 				}
 		});
 	});
