@@ -111,14 +111,9 @@
 								</div>
 							</div>
 							<div class="row">
-<<<<<<< HEAD
-									<button class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i></button>
-									<button class="btn btn-default"><i class="glyphicon glyphicon-chevron-right"></i></button>
-=======
 									<input type="hidden" value="0" name="page"></input>
 									<button class="btn btn-default previous"><i class="glyphicon glyphicon-chevron-left"></i></button>
 									<button class="btn btn-default next"><i class="glyphicon glyphicon-chevron-right"></i></button>
->>>>>>> fe65f560a8840cb9f97d9fc609266772b782ef3f
 								</div>
 						</div>
 						<div class="table-container">
@@ -202,6 +197,21 @@
 	        {
 	            $('.table-filter').html(result);
 
+							$('input[name="page"]').val(0);
+
+							$('.previous').prop('disabled', false);
+							$('.next').prop('disabled', false);
+
+							if ($('.table-filter >tbody >tr').length == 25)
+							{
+									$('.previous').prop('disabled', true);
+							}
+							else
+							{
+								$('.previous').prop('disabled', true);
+								$('.next').prop('disabled', true);
+							}
+
 							$.ajax({
 					        url: "ajax.php",
 					        type : 'POST',
@@ -249,14 +259,12 @@
 
 						if ($('.table-filter >tbody >tr').length == 25)
 						{
+								$('input[name="page"]').val(parseInt($('input[name="page"]').val())-1);
+								$('.next').prop('disabled', false);
+
 								if ($('input[name="page"]').val() == 0)
 								{
 										$('.previous').prop('disabled', true);
-								}
-								else
-								{
-									$('input[name="page"]').val(parseInt($('input[name="page"]').val())-1);
-									$('.next').prop('disabled', false);
 								}
 						}
 						else
@@ -298,10 +306,11 @@
 				{
 						$('.table-filter').html(result);
 
+						$('input[name="page"]').val(parseInt($('input[name="page"]').val())+1);
+						$('.previous').prop('disabled', false);
+
 						if ($('.table-filter >tbody >tr').length == 25)
 						{
-							$('input[name="page"]').val(parseInt($('input[name="page"]').val())+1);
-							$('.previous').prop('disabled', false);
 							$('.next').prop('disabled', false);
 						}
 						else
