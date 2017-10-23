@@ -111,8 +111,14 @@
 								</div>
 							</div>
 							<div class="row">
+<<<<<<< HEAD
 									<button class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i></button>
 									<button class="btn btn-default"><i class="glyphicon glyphicon-chevron-right"></i></button>
+=======
+									<input type="hidden" value="0" name="page"></input>
+									<button class="btn btn-default previous"><i class="glyphicon glyphicon-chevron-left"></i></button>
+									<button class="btn btn-default next"><i class="glyphicon glyphicon-chevron-right"></i></button>
+>>>>>>> fe65f560a8840cb9f97d9fc609266772b782ef3f
 								</div>
 						</div>
 						<div class="table-container">
@@ -207,6 +213,76 @@
 					    });
 	        }
 	    });
+	});
+
+	$('.previous').on('click', function()
+	{
+		if ($('select[id="listEditor"] > option:selected').val())
+		{
+			var editeur = new Array();
+
+			$('select[id="listEditor"] > option:selected').each(function()
+			{
+				editeur.push($(this).val());
+			});
+		}
+
+		if ($('select[id="listFaille"] > option:selected').val())
+		{
+			var faille = new Array();
+
+			$('select[id="listFaille"] > option:selected').each(function()
+			{
+				faille.push($(this).val());
+			});
+		}
+
+		$.ajax({
+				url: "ajax.php",
+				type : 'POST',
+				data : {'createTable':1, 'previous': $('input[name="page"]').val(), 'editeur':JSON.stringify(editeur),'faille':JSON.stringify(faille), 'status':$('select[id="listStatus"] > option:selected').val()},
+
+				success : function(result)
+				{
+						$('.table-filter').html(result);
+				   	$('input[type="page"]').val(parseInt($('input[name="page"]').val()-1));
+				}
+		});
+	});
+
+	$('.next').on('click', function()
+	{
+		if ($('select[id="listEditor"] > option:selected').val())
+		{
+			var editeur = new Array();
+
+			$('select[id="listEditor"] > option:selected').each(function()
+			{
+				editeur.push($(this).val());
+			});
+		}
+
+		if ($('select[id="listFaille"] > option:selected').val())
+		{
+			var faille = new Array();
+
+			$('select[id="listFaille"] > option:selected').each(function()
+			{
+				faille.push($(this).val());
+			});
+		}
+
+		$.ajax({
+				url: "ajax.php",
+				type : 'POST',
+				data : {'createTable':1, 'next': $('input[name="page"]').val(), 'editeur':JSON.stringify(editeur),'faille':JSON.stringify(faille), 'status':$('select[id="listStatus"] > option:selected').val()},
+
+				success : function(result)
+				{
+						$('.table-filter').html(result);
+						$('input[type="page"]').val(parseInt($('input[name="page"]').val()+1));
+				}
+		});
 	});
 </script>
 </html>

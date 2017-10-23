@@ -111,6 +111,20 @@
 		return $query_preparation->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	function queryFetchWith1ArrayAnd2Value($query, $nomColonne1, $array, $nomColonne2, $value2, $nomColonne3, $value3)
+	{
+		include("include/_inc_parametres.php");
+		include("include/_inc_connexion.php");
+
+		$query = str_replace($nomColonne1, implode(",", $array), $query);
+
+		$query_preparation = $cnx->prepare($query);
+		$query_preparation->bindValue($nomColonne2, $value2, PDO::PARAM_INT);
+		$query_preparation->bindValue($nomColonne3, $value3, PDO::PARAM_INT);
+		$query_preparation->execute();
+		return $query_preparation->fetchAll(PDO::FETCH_ASSOC);
+	}
+
 	function queryFetchWith2ArrayAnd1Value($query, $nomColonne1, $array1, $nomColonne2, $array2, $nomColonne3, $value)
 	{
 		include("include/_inc_parametres.php");
@@ -120,6 +134,20 @@
 
 		$query_preparation = $cnx->prepare($query);
 		$query_preparation->bindValue($nomColonne3, $value, PDO::PARAM_INT);
+		$query_preparation->execute();
+		return $query_preparation->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	function queryFetchWith2ArrayAnd2Value($query, $nomColonne1, $array1, $nomColonne2, $array2, $nomColonne3, $value3, $nomColonne4, $value4)
+	{
+		include("include/_inc_parametres.php");
+		include("include/_inc_connexion.php");
+
+		$query = str_replace($nomColonne2, implode(",", $array2), str_replace($nomColonne1, implode(",", $array1), $query));
+
+		$query_preparation = $cnx->prepare($query);
+		$query_preparation->bindValue($nomColonne3, $value3, PDO::PARAM_INT);
+		$query_preparation->bindValue($nomColonne4, $value4, PDO::PARAM_INT);
 		$query_preparation->execute();
 		return $query_preparation->fetchAll(PDO::FETCH_ASSOC);
 	}
@@ -474,84 +502,86 @@
 	    return $str;
 	}
 
-	function getListCVE($editeur, $faille, $status)
+	function getListCVE($editeur, $faille, $status, $page)
 	{
 			include("SQLQuery.php");
 
+			$page = $page * 25;
+
 			if (empty($editeur) && empty($faille) && empty($status))
 			{
-				$listCVE = queryFetchWithoutValue($queryGetAllCVEWithEditor);
+				$listCVE = queryFetchWith1Value($queryGetAllCVEWithEditor, ":offset", $page);
 			}
 			else if (!empty($editeur) && empty($faille) && empty($status))
 			{
-				$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
+				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur, ":offset", $page);
 			}
 			else if (empty($editeur) && !empty($faille) && empty($status))
 			{
-				$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
+				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille, ":offset", $page);
 			}
 			else if (empty($editeur) && empty($faille) && !empty($status))
 			{
 				if ($status == "all")
 				{
-					$listCVE = queryFetchWithoutValue($queryGetAllCVEWithEditor);
+					$listCVE = queryFetchWith1Value($queryGetAllCVEWithEditor, ":offset", $page);
 				}
 				else if ($status == "open")
 				{
-					$listCVE = queryFetchWith1Value($queryGetAllCVEWithStatus, ":statusCve", 1);
+					$listCVE = queryFetchWith2Value($queryGetAllCVEWithStatus, ":statusCve", 1, ":offset", $page);
 				}
 				else if ($status == "close")
 				{
-					$listCVE = queryFetchWith1Value($queryGetAllCVEWithStatus, ":statusCve", 0);
+					$listCVE = queryFetchWith2Value($queryGetAllCVEWithStatus, ":statusCve", 0, ":offset", $page);
 				}
 			}
 			else if (!empty($editeur) && !empty($faille) && empty($status))
 			{
-				$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
+				$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":offset", $page);
 			}
 			else if (!empty($editeur) && empty($faille) && !empty($status))
 			{
 				if ($status == "all")
 				{
-					$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
+					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur, ":offset", $page);
 				}
 				else if ($status == "open")
 				{
-					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1);
+					$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1, ":offset", $page);
 				}
 				else if ($status == "close")
 				{
-					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0);
+					$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0, ":offset", $page);
 				}
 			}
 			else if (empty($editeur) && !empty($faille) && !empty($status))
 			{
 				if ($status == "all")
 				{
-					$listCVE = queryFetchWith1ArrayValue($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
+					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille, ":offset", $page);
 				}
 				else if ($status == "open")
 				{
-					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $editeur, ":statusCve", 1);
+					$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1, ":offset", $page);
 				}
 				else if ($status == "close")
 				{
-					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $editeur, ":statusCve", 0);
+					$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 0, ":offset", $page);
 				}
 			}
 			else if (!empty($editeur) && !empty($faille) && !empty($status))
 			{
 				if ($status == "all")
 				{
-					$listCVE = queryFetchWith2ArrayValue($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
+					$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":offset", $page);
 				}
 				else if ($status == "open")
 				{
-					$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 1);
+					$listCVE = queryFetchWith2ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 1, ":offset", $page);
 				}
 				else if ($status == "close")
 				{
-					$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0);
+					$listCVE = queryFetchWith2ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0, ":offset", $page);
 				}
 			}
 
@@ -640,20 +670,20 @@
 
 			if (empty($editeur) && empty($faille) && empty($status))
 			{
-				$nbCVE = queryFetchWithoutValue($queryGetNbAllCVEWithEditor);
+				$nbCVE = getNbCVE("", "", "");
 				$topFailleCVE = queryFetchWithoutValue($queryGetTopFailleAllCVE);
 				$topEditeurCVE = queryFetchWithoutValue($queryGetTopEditeurAllCVE);
 				$moyenneCVE = queryFetchWithoutValue($queryGetAVGAllCVE);
 			}
 			else if (!empty($editeur) && empty($faille) && empty($status))
 			{
-				$nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
+				$nbCVE = getNbCVE($editeur, "", "");
 				$topFailleCVE = queryFetchWith1ArrayValue($queryGetTopFailleAllCVEWithEditor, ":arrayIdEditeur", $editeur);
 				$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
 			}
 			else if (empty($editeur) && !empty($faille) && empty($status))
 			{
-				$nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
+				$nbCVE = getNbCVE("", $faille, "");
 				$topEditeurCVE = queryFetchWith1ArrayValue($queryGetTopEditeurAllCVEWithFaille, ":arrayIdFaille", $faille);
 				$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
 			}
@@ -661,21 +691,21 @@
 			{
 				if ($status == "all")
 				{
-					$nbCVE = queryFetchWithoutValue($queryGetNbAllCVEWithEditor);
+					$nbCVE = getNbCVE("", "", "");
 					$topFailleCVE = queryFetchWithoutValue($queryGetTopFailleAllCVE);
 					$topEditeurCVE = queryFetchWithoutValue($queryGetTopEditeurAllCVE);
 					$moyenneCVE = queryFetchWithoutValue($queryGetAVGAllCVE);
 				}
 				else if ($status == "open")
 				{
-					$nbCVE = queryFetchWith1Value($queryGetNbAllCVEWithStatus, ":statusCve", 1);
+					$nbCVE = getNbCVE("", "", $status);
 					$topFailleCVE = queryFetchWith1Value($queryGetTopFailleAllCVEWithStatus, ":statusCve", 1);
 					$topEditeurCVE = queryFetchWith1Value($queryGetTopEditeurAllCVEWithStatus, ":statusCve", 1);
 					$moyenneCVE = queryFetchWith1Value($queryGetAVGAllCVEWithStatus, ":statusCve", 1);
 				}
 				else if ($status == "close")
 				{
-					$nbCVE = queryFetchWith1Value($queryGetNbAllCVEWithStatus, ":statusCve", 0);
+					$nbCVE = getNbCVE("", "", $status);
 					$topFailleCVE = queryFetchWith1Value($queryGetTopFailleAllCVEWithStatus, ":statusCve", 0);
 					$topEditeurCVE = queryFetchWith1Value($queryGetTopEditeurAllCVEWithStatus, ":statusCve", 0);
 					$moyenneCVE = queryFetchWith1Value($queryGetAVGAllCVEWithStatus, ":statusCve", 0);
@@ -683,26 +713,26 @@
 			}
 			else if (!empty($editeur) && !empty($faille) && empty($status))
 			{
-				$nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
-				$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
+				$nbCVE = getNbCVE($editeur, $faille, "");
+				$moyenneCVE = queryFetchWith2ArrayValue($queryGetAVGAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
 			}
 			else if (!empty($editeur) && empty($faille) && !empty($status))
 			{
 				if ($status == "all")
 				{
-					$nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
+					$nbCVE = getNbCVE($editeur, "", "");
 					$topFailleCVE = queryFetchWith1ArrayValue($queryGetTopFailleAllCVEWithEditor, ":arrayIdEditeur", $editeur);
 					$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
 				}
 				else if ($status == "open")
 				{
-					$nbCVE = queryFetchWith1ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1);
+					$nbCVE = getNbCVE($editeur, "", $status);
 					$topFailleCVE = queryFetchWith1ArrayAnd1Value($queryGetTopFailleAllCVEWithEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1);
 					$moyenneCVE = queryFetchWith1ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1);
 				}
 				else if ($status == "close")
 				{
-					$nbCVE = queryFetchWith1ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0);
+					$nbCVE = getNbCVE($editeur, "", $status);
 					$topFailleCVE = queryFetchWith1ArrayAnd1Value($queryGetTopFailleAllCVEWithEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0);
 					$moyenneCVE = queryFetchWith1ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0);
 				}
@@ -711,19 +741,19 @@
 			{
 				if ($status == "all")
 				{
-					$nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
+					$nbCVE = getNbCVE("", $faille, $status);
 					$topEditeurCVE = queryFetchWith1ArrayValue($queryGetTopEditeurAllCVEWithFaille, ":arrayIdFaille", $faille);
 					$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
 				}
 				else if ($status == "open")
 				{
-					$nbCVE = queryFetchWith1ArrayAnd1Value($queryGetNbAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1);
+					$nbCVE = getNbCVE("", $faille, $status);
 					$topEditeurCVE = queryFetchWith1ArrayAnd1Value($queryGetTopEditeurAllCVEWithFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1);
 					$moyenneCVE = queryFetchWith1ArrayAnd1Value($queryGetAVGAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1);
 				}
 				else if ($status == "close")
 				{
-					$nbCVE = queryFetchWith1ArrayAnd1Value($queryGetNbAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $editeur, ":statusCve", 0);
+					$nbCVE = getNbCVE("", $faille, $status);
 					$topEditeurCVE = queryFetchWith1ArrayAnd1Value($queryGetTopEditeurAllCVEWithFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 0);
 					$moyenneCVE = queryFetchWith1ArrayAnd1Value($queryGetAVGAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 0);
 				}
@@ -732,18 +762,18 @@
 			{
 				if ($status == "all")
 				{
-					$nbCVE = queryFetchWith2ArrayValue($queryGetNbAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
+					$nbCVE = getNbCVE($editeur, $faille, "");
 					$moyenneCVE = queryFetchWith2ArrayValue($queryGetAVGAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
 				}
 				else if ($status == "open")
 				{
-					$nbCVE = queryFetchWith2ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 1);
-					$moyenneCVE = queryFetchWith2ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 1);
+					$nbCVE = getNbCVE($editeur, $faille, $status);
+					$moyenneCVE = queryFetchWith2ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":statusCve", 1);
 				}
 				else if ($status == "close")
 				{
-					$nbCVE = queryFetchWith2ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0);
-					$moyenneCVE = queryFetchWith2ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0);
+					$nbCVE = getNbCVE($editeur, $faille, $status);
+					$moyenneCVE = queryFetchWith2ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":statusCve", 0);
 				}
 			}
 
@@ -803,5 +833,88 @@
 				echo '<h4>Note moyenne : '.number_format($moyenneCVE[0]["Moyenne"], 2).'</h4>';
 			}
 		}
+	}
+
+	function getNbCVE($editeur, $faille, $status)
+	{
+		include("SQLQuery.php");
+
+		if (empty($editeur) && empty($faille) && empty($status))
+		{
+			return $nbCVE = queryFetchWithoutValue($queryGetNbAllCVEWithEditor);
+		}
+		else if (!empty($editeur) && empty($faille) && empty($status))
+		{
+			return $nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
+		}
+		else if (empty($editeur) && !empty($faille) && empty($status))
+		{
+			return $nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
+		}
+		else if (empty($editeur) && empty($faille) && !empty($status))
+		{
+			if ($status == "all")
+			{
+				return $nbCVE = queryFetchWithoutValue($queryGetNbAllCVEWithEditor);
+			}
+			else if ($status == "open")
+			{
+				return $nbCVE = queryFetchWith1Value($queryGetNbAllCVEWithStatus, ":statusCve", 1);
+			}
+			else if ($status == "close")
+			{
+				return $nbCVE = queryFetchWith1Value($queryGetNbAllCVEWithStatus, ":statusCve", 0);
+			}
+		}
+		else if (!empty($editeur) && !empty($faille) && empty($status))
+		{
+			return $nbCVE = queryFetchWith2ArrayValue($queryGetNbAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
+		}
+		else if (!empty($editeur) && empty($faille) && !empty($status))
+		{
+			if ($status == "all")
+			{
+				return $nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
+			}
+			else if ($status == "open")
+			{
+				return $nbCVE = queryFetchWith1ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1);
+			}
+			else if ($status == "close")
+			{
+				return $nbCVE = queryFetchWith1ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0);
+			}
+		}
+		else if (empty($editeur) && !empty($faille) && !empty($status))
+		{
+			if ($status == "all")
+			{
+				return $nbCVE = queryFetchWith1ArrayValue($queryGetNbAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
+			}
+			else if ($status == "open")
+			{
+				return $nbCVE = queryFetchWith1ArrayAnd1Value($queryGetNbAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1);
+			}
+			else if ($status == "close")
+			{
+				return $nbCVE = queryFetchWith1ArrayAnd1Value($queryGetNbAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $editeur, ":statusCve", 0);
+			}
+		}
+		else if (!empty($editeur) && !empty($faille) && !empty($status))
+		{
+			if ($status == "all")
+			{
+				return $nbCVE = queryFetchWith2ArrayValue($queryGetNbAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
+			}
+			else if ($status == "open")
+			{
+				return $nbCVE = queryFetchWith2ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 1);
+			}
+			else if ($status == "close")
+			{
+				return $nbCVE = queryFetchWith2ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0);
+			}
+		}
+
 	}
 ?>
