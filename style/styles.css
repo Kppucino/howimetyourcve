@@ -10,7 +10,7 @@ body
 
 .navbar-default {
     background-color: #F5E641;
-    border-color: #F5E648;
+    border-color: #F5E652;
 }
 
 .navbar-default .navbar-brand {
@@ -21,10 +21,38 @@ body
 margin-left: 10px;
 }
 
-p, h1,h2,h3 {
+h1{
+	font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+	font-size: 24px;
+	font-style: normal;
+	font-variant:normal;
+	font-weight: 500;
+	line-height: 26.4px; 
+}
+
+h3{
+	font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-variant:normal;
+	font-weight: 500;
+	line-height: 15.6px; 
+	display: block;
+	text-align: center;	
+}
+
+
+p {
+	font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-variant:normal;
+	font-weight: 500;
+	line-height: 15.6px; 
+		
 	padding: 10px;
 	display: block;
-	text-align: center;
+	text-align: center;	
 }
 
 .important {
