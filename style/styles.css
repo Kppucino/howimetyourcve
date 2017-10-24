@@ -1,27 +1,53 @@
 @import url('https://fonts.googleapis.com/css?family=Arapey');
 body
 {
-	background-color: #efebee;
+	background-color: #ffff;
 	font-size: 17px;
 	margin-top: 1em auto 2em;
 	color : #000;
 }
 
 
+
 .navbar-default {
     background-color: #F5E641;
-    border-color: #F5E648;
+    border-color: #F5E652;
 }
 
 .navbar-default .navbar-brand {
     color: #fff;
 }
 
-#main p {
-margin-left: 10px;
+h1{
+	font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+	font-size: 24px;
+	font-style: normal;
+	font-variant:normal;
+	font-weight: 500;
+	line-height: 26.4px;
+	text-align: center;
 }
 
-p, h1,h2,h3 {
+h3{
+	font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-variant:normal;
+	font-weight: 500;
+	line-height: 15.6px;
+	display: block;
+	text-align: center;
+}
+
+
+p {
+	font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-variant:normal;
+	font-weight: 500;
+	line-height: 15.6px;
+
 	padding: 10px;
 	display: block;
 	text-align: center;
@@ -38,7 +64,6 @@ width: 350px;
 {
 	background-image: url('../images/logo/ms-icon-70x70.png');
 	width: 70px;
-
 }
 
 .searchIcon
@@ -48,7 +73,7 @@ width: 350px;
 
 .statPanel
 {
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: rgba(241, 241, 241, 0.4);
 	border-radius: 1em;
 }
 
