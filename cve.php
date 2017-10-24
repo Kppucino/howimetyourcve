@@ -8,340 +8,186 @@
   <?php
       if (isset($_GET["idCVE"]))
       {
-        if (is_int($_GET["idCVE"]))
+        if (is_int(intval($_GET["idCVE"])))
         {
           $cve = queryFetchWith1Value($queryGetCVEByIdCve, ":idCve", $_GET["idCVE"]);
           $reference = queryFetchWith1Value($queryGetReferenceCVEByIdCVE, ":idCve", $_GET["idCVE"]);
           $faille = queryFetchWith1Value($queryGetFailleCVEByIdCVE, ":idCve", $_GET["idCVE"]);
 
           echo '<div class="container-fluid">';
-          echo '<div class="col-md-2 statPanel">';
-          echo '<h2>Informations :</h2>';
 
-          if (isset($cve[0])) 
+          if (printInfoCVE($cve) == true || !empty($faille))
           {
-            # code...
+            echo '<div class="col-md-2 statPanel">';
+
+            if (printInfoCVE($cve))
+            {
+                echo '<h2>Informations :</h2>';
+
+                if (isset($cve[0]["severiteCve"]))
+                {
+                    echo '<h4>'.number_format($cve[0]["severiteCve"], 2).'</h4>';
+                }
+
+                if (isset($cve[0]["severiteCve"]))
+                {
+                    echo '<h4>'.number_format($cve[0]["noteBaseCve"], 2).'</h4>';
+                }
+
+                if (isset($cve[0]["noteImpactCve"]))
+                {
+                    echo '<h4>'.number_format($cve[0]["noteImpactCve"], 2).'</h4>';
+                }
+
+                if (isset($cve[0]["noteExploitabiliteCve"]))
+                {
+                    echo '<h4>'.number_format($cve[0]["noteExploitabiliteCve"], 2).'</h4>';
+                }
+
+                if (isset($cve[0]["accesComplexiteCve"]))
+                {
+                    echo '<h4>'.$cve[0]["accesComplexiteCve"].'</h4>';
+                }
+
+                if (isset($cve[0]["adminAccesCve"]) || isset($cve[0]["userAccesCve"]))
+                {
+                    echo '<h3>Droit</h3>';
+
+                    if (isset($cve[0]["adminAccesCve"]) && isset($cve[0]["userAccesCve"]))
+                    {
+                      if ($cve[0]["adminAccesCve"] == 1 && $cve[0]["userAccesCve"] == 1)
+                      {
+                          echo '<li>Administration</li>';
+                          echo '<li>Utilisateur</li>';
+                      }
+                      else if (isset($cve[0]["adminAccesCve"]))
+                      {
+                        echo '<li>Administration</li>';
+                      }
+                      else if (isset($cve[0]["userAccesCve"]))
+                      {
+                        echo '<li>Utilisateur</li>';
+                      }
+                    }
+                }
+
+                if (isset($cve[0]["userInteractionRequiredCve"]))
+                {
+                    if ($cve[0]["userInteractionRequiredCve"] == 0)
+                    {
+                      echo '<h4>Interaction utilisateur non nécessaire</h4>';
+                    }
+                    else
+                    {
+                      echo '<h4>Interaction utilisateur nécessaire</h4>';
+                    }
+
+                }
+
+                if (isset($cve[0]["authentificationImpactCve"]) || isset($cve[0]["confidentialiteImpactCve"]) || isset($cve[0]["integriteImpactCve"]) || isset($cve[0]["disponibiliteImpactCve"]))
+                {
+                    echo '<h3>Impact sur</h3>';
+
+                    if (isset($cve[0]["authentificationImpactCve"]))
+                    {
+                        echo '<li>Authentification ('.$cve[0]["authentificationImpactCve"].')</li>';
+                    }
+
+                    if (isset($cve[0]["confidentialiteImpactCve"]))
+                    {
+                        echo '<li>Confidentialite ('.$cve[0]["confidentialiteImpactCve"].')</li>';
+                    }
+
+                    if (isset($cve[0]["integriteImpactCve"]))
+                    {
+                        echo '<li>Integrite ('.$cve[0]["integriteImpactCve"].')</li>';
+                    }
+
+                    if (isset($cve[0]["disponibiliteImpactCve"]))
+                    {
+                        echo '<li>Disponibilite ('.$cve[0]["disponibiliteImpactCve"].')</li>';
+                    }
+                  }
+              }
+
+              if (!empty($faille))
+              {
+                echo '<h2>Faille :</h2>';
+
+                $compteurCSS = 0;
+
+                for ($i=0; $i < sizeof($faille); $i++)
+    						{
+    							if ($compteurCSS == 0)
+    	            {
+    	                echo '<div class="row">';
+    	            }
+
+    							echo '<a href="faille.php?idFaille='.$faille[$i]["idFaille"].'"><button type="button" class="btn btn-default btn-sm">'.$faille[$i]["nomFaille"].'</button></a>';
+
+    							$compteurCSS ++;
+
+    	            if ($compteurCSS == 4 || $i + 1 == sizeof($faille))
+    	            {
+    	                echo '</div>';
+    	                $compteurCSS = 0;
+    	            }
+    						}
+              }
+
+              echo '</div>';
           }
-  ?>
 
+          if (printInfoCVE($cve) == true || !empty($faille))
+          {
+              echo '<div class="col-md-10">';
+          }
+          else
+          {
+            echo '<div class="col-md-12">';
+          }
 
+          echo '<div class="row">';
+          echo '<h1 class="col-md-2">'.$cve[0]["nomCve"].'</h1>';
+          echo '<h4 class="col-md-offset-8 col-md-2">'.formaterDate($cve[0]["dateCve"]).'</h4>';
+          echo '</div>';
+          echo '<div class="row">';
+          echo '<h3 class="col-md-2"><a href="editeur.php?idEditeur='.$cve[0]["idEditeur"].'">'.$cve[0]["nomEditeur"].'</a></h3>';
 
-				<h2>Informations :</h2>
+          if ($cve[0]["statusCve"] == 1)
+					{
+							echo '<span class="col-md-offset-8 col-md-2">Ouvertes</span>';
+					}
+					else
+					{
+							echo '<span class="col-md-offset-8 col-md-2">Fermées</span>';
+					}
 
-  			<h4><?php echo $cve
-				<h2>Tags :</h2>
-					<?php
-						$editor = queryFetchWithoutValue($queryGetRandEditor);
-						$faille = queryFetchWithoutValue($queryGetRandFaille);
+          echo '</div>';
 
-						$compteurCSS = 0;
+          echo '<div class="descriptionCve">';
+          echo '<h3>Description : </h3>';
+          echo '<p>'.$cve[0]["descriptionCve"].'</p>';
+          echo '</div>';
 
-						for ($i=0; $i < sizeof($editor); $i++)
-						{
-							if ($compteurCSS == 0)
-	            {
-	                echo '<div class="row">';
-	            }
+          //PARTIE COMMENTAIRE USER
 
-							echo '<a href="editeur.php?idEditeur='.$editor[$i]["idEditeur"].'"><button type="button" class="btn btn-default btn-sm">'.$editor[$i]["nomEditeur"].'</button></a>';
+          if (!empty($reference))
+          {
+            echo '<div class="descriptionCve">';
+            echo '<h4>Reference : </h4>';
 
-							$compteurCSS ++;
+            for ($i=0; $i < sizeof($reference); $i++)
+            {
+                echo '<li><a target="_blank" href="'.$reference[$i]["urlReference"].'">'.$reference[$i]["urlReference"].'</a></li>';
+            }
 
-	            if ($compteurCSS == 4)
-	            {
-	                echo '</div>';
-	                $compteurCSS = 0;
-	            }
-						}
-
-						for ($i=0; $i < sizeof($faille); $i++)
-						{
-							if ($compteurCSS == 0)
-	            {
-	                echo '<div class="row">';
-	            }
-
-							echo '<a href="faille.php?idFaille='.$faille[$i]["idFaille"].'"><button type="button" class="btn btn-default btn-sm">'.$faille[$i]["nomFaille"].'</button></a>';
-
-							$compteurCSS ++;
-
-	            if ($compteurCSS == 4)
-	            {
-	                echo '</div>';
-	                $compteurCSS = 0;
-	            }
-						}
-
-					?>
-			</div>
-			<div class="col-md-10">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="filtre">
-							<div class="col-md-3">
-								<div class="form-group">
-							    <label class="col-md-3 control-label" for="rolename">Editeur</label>
-							    <div class="col-md-5">
-							        <select id="listEditor" class="multiselect-ui form-control" multiple="multiple">
-													<?php
-															$listEditor = queryFetchWithoutValue($queryGetEditeur);
-
-															for ($i=0; $i < sizeof($listEditor); $i++)
-        											{
-																	echo '<option value='.$listEditor[$i]["idEditeur"].'>'.$listEditor[$i]["nomEditeur"].'</option>';
-															}
-													 ?>
-							        </select>
-							    </div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-							    <label class="col-md-3 control-label" for="rolename">Faille</label>
-							    <div class="col-md-5">
-							        <select id="listFaille" class="multiselect-ui form-control" multiple="multiple">
-												<?php
-														$listFaille = queryFetchWithoutValue($queryGetFaille);
-
-														for ($i=0; $i < sizeof($listFaille); $i++)
-														{
-																echo '<option value='.$listFaille[$i]["idFaille"].'>'.$listFaille[$i]["nomFaille"].'</option>';
-														}
-												 ?>
-							        </select>
-							    </div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-							    <label class="col-md-3 control-label" for="rolename">Status</label>
-							    <div class="col-md-5">
-							        <select id="listStatus" class="multiselect-ui form-control">
-												<option value="all">Toutes</option>
-												<option value="open">Ouvertes</option>
-												<option value="close">Fermées</option>
-							        </select>
-							    </div>
-								</div>
-							</div>
-							<div class="col-md-1">
-								<div class="buttonFiltre">
-									<button class="btn btn-default"><i class="glyphicon glyphicon-filter"></i></button>
-								</div>
-							</div>
-							<div class="row">
-									<input type="hidden" value="0" name="page"></input>
-									<button class="btn btn-default previous"><i class="glyphicon glyphicon-chevron-left"></i></button>
-									<button class="btn btn-default next"><i class="glyphicon glyphicon-chevron-right"></i></button>
-								</div>
-						</div>
-						<div class="table-container">
-							<table class="table table-filter">
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-  <?php
+            echo '</div>';
+          }
         }
       }
-  ?>
-		<?php
-			include("footer.php");
+
+		include("footer.php");
 		?>
 </body>
-
-<script type="text/javascript">
-	$(function() {
-	    $('.multiselect-ui').multiselect({
-	        includeSelectAllOption: true
-	    });
-	});
-
-	$(document).ready(function ()
-	{
-		$('.star').on('click', function () {
-	      $(this).toggleClass('star-checked');
-	    });
-
-		$.ajax({
-				url: "ajax.php",
-				type : 'POST',
-				data : "createTable=empty",
-
-				success : function(result)
-				{
-						$('.table-filter').html(result);
-						$('.previous').prop('disabled', true);
-				}
-		});
-
-		$.ajax({
-				url: "ajax.php",
-				type : 'POST',
-				data : "createStat=empty",
-
-				success : function(result)
-				{
-						$('.statCVE').html(result);
-				}
-		});
-	 });
-
-	$('.buttonFiltre').on('click', function()
-	{
-	    if ($('select[id="listEditor"] > option:selected').val())
-	    {
-				var editeur = new Array();
-
-				$('select[id="listEditor"] > option:selected').each(function()
-				{
-					editeur.push($(this).val());
-				});
-	    }
-
-			if ($('select[id="listFaille"] > option:selected').val())
-	    {
-				var faille = new Array();
-
-				$('select[id="listFaille"] > option:selected').each(function()
-				{
-					faille.push($(this).val());
-				});
-	    }
-
-	    $.ajax({
-	        url: "ajax.php",
-	        type : 'POST',
-	        data : {'createTable':1,'editeur':JSON.stringify(editeur),'faille':JSON.stringify(faille), 'status':$('select[id="listStatus"] > option:selected').val()},
-
-	        success : function(result)
-	        {
-	            $('.table-filter').html(result);
-
-							$('input[name="page"]').val(0);
-
-							$('.previous').prop('disabled', false);
-							$('.next').prop('disabled', false);
-
-							if ($('.table-filter >tbody >tr').length == 25)
-							{
-									$('.previous').prop('disabled', true);
-							}
-							else
-							{
-								$('.previous').prop('disabled', true);
-								$('.next').prop('disabled', true);
-							}
-
-							$.ajax({
-					        url: "ajax.php",
-					        type : 'POST',
-					        data : {'createStat':1,'editeur':JSON.stringify(editeur),'faille':JSON.stringify(faille), 'status':$('select[id="listStatus"] > option:selected').val()},
-
-					        success : function(result)
-					        {
-					            $('.statCVE').html(result);
-					        }
-					    });
-	        }
-	    });
-	});
-
-	$('.previous').on('click', function()
-	{
-		if ($('select[id="listEditor"] > option:selected').val())
-		{
-			var editeur = new Array();
-
-			$('select[id="listEditor"] > option:selected').each(function()
-			{
-				editeur.push($(this).val());
-			});
-		}
-
-		if ($('select[id="listFaille"] > option:selected').val())
-		{
-			var faille = new Array();
-
-			$('select[id="listFaille"] > option:selected').each(function()
-			{
-				faille.push($(this).val());
-			});
-		}
-
-		$.ajax({
-				url: "ajax.php",
-				type : 'POST',
-				data : {'createTable':1, 'previous': $('input[name="page"]').val(), 'editeur':JSON.stringify(editeur),'faille':JSON.stringify(faille), 'status':$('select[id="listStatus"] > option:selected').val()},
-
-				success : function(result)
-				{
-						$('.table-filter').html(result);
-
-						if ($('.table-filter >tbody >tr').length == 25)
-						{
-								$('input[name="page"]').val(parseInt($('input[name="page"]').val())-1);
-								$('.next').prop('disabled', false);
-
-								if ($('input[name="page"]').val() == 0)
-								{
-										$('.previous').prop('disabled', true);
-								}
-						}
-						else
-						{
-							$('.previous').prop('disabled', true);
-						}
-				}
-		});
-	});
-
-	$('.next').on('click', function()
-	{
-		if ($('select[id="listEditor"] > option:selected').val())
-		{
-			var editeur = new Array();
-
-			$('select[id="listEditor"] > option:selected').each(function()
-			{
-				editeur.push($(this).val());
-			});
-		}
-
-		if ($('select[id="listFaille"] > option:selected').val())
-		{
-			var faille = new Array();
-
-			$('select[id="listFaille"] > option:selected').each(function()
-			{
-				faille.push($(this).val());
-			});
-		}
-
-		$.ajax({
-				url: "ajax.php",
-				type : 'POST',
-				data : {'createTable':1, 'next': $('input[name="page"]').val(), 'editeur':JSON.stringify(editeur),'faille':JSON.stringify(faille), 'status':$('select[id="listStatus"] > option:selected').val()},
-
-				success : function(result)
-				{
-						$('.table-filter').html(result);
-
-						$('input[name="page"]').val(parseInt($('input[name="page"]').val())+1);
-						$('.previous').prop('disabled', false);
-
-						if ($('.table-filter >tbody >tr').length == 25)
-						{
-							$('.next').prop('disabled', false);
-						}
-						else
-						{
-							$('.next').prop('disabled', true);
-						}
-				}
-		});
-	});
-</script>
 </html>

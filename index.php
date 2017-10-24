@@ -46,7 +46,7 @@
 
 							$compteurCSS ++;
 
-	            if ($compteurCSS == 4)
+	            if ($compteurCSS == 4 || $i + 1 == sizeof($faille))
 	            {
 	                echo '</div>';
 	                $compteurCSS = 0;

@@ -628,13 +628,13 @@
 					if (isset($listCVE[$i]["logoEditeur"]))
 					{
 							echo '<a href="editeur.php?idEditeur='.$listCVE[$i]["idEditeur"].'" class="pull-left">';
-							echo '<img src="images/logoEditeur/'.$listCVE[$i]["logoEditeur"].'" class="media-photo">';
+							echo '<img src="images/logoEditeur/'.$listCVE[$i]["logoEditeur"].'" class="media-photo"></img>';
 							echo '</a>';
 					}
 
 					echo '<div class="media-body">';
 					echo '<a href="cve.php?idCVE='.$listCVE[$i]["idCve"].'">';
-					echo '<span class="media-meta pull-right">'.$listCVE[$i]["dateCve"].'</span>';
+					echo '<span class="media-meta pull-right">'.formaterDate($listCVE[$i]["dateCve"]).'</span>';
 					echo '<h4 class="title">';
 					echo $listCVE[$i]["nomCve"];
 
@@ -915,6 +915,60 @@
 				return $nbCVE = queryFetchWith2ArrayAnd1Value($queryGetNbAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0);
 			}
 		}
+	}
 
+	function printInfoCVE($cve)
+	{
+
+		if (isset($cve[0]["severiteCve"]))
+		{
+				return true;
+		}
+
+		if (isset($cve[0]["severiteCve"]))
+		{
+				return true;
+		}
+
+		if (isset($cve[0]["noteImpactCve"]))
+		{
+				return true;
+		}
+
+		if (isset($cve[0]["noteExploitabiliteCve"]))
+		{
+				return true;
+		}
+
+		if (isset($cve[0]["accesComplexiteCve"]))
+		{
+				return true;
+		}
+
+		if (isset($cve[0]["adminAccesCve"]) || isset($cve[0]["userAccesCve"]))
+		{
+				return true;
+		}
+
+		if (isset($cve[0]["userInteractionRequiredCve"]))
+		{
+				return true;
+		}
+
+		if (isset($cve[0]["authentificationImpactCve"]) || isset($cve[0]["confidentialiteImpactCve"]) || isset($cve[0]["integriteImpactCve"]) || isset($cve[0]["disponibiliteImpactCve"]))
+		{
+				return true;
+		}
+
+		return false;
+	}
+
+	function formaterDate($date)
+	{
+		$annee = substr($date, 0, 4);
+		$mois = substr($date, 5, 2);
+		$jour = substr($date, 8, 2);
+
+		return $jour."/".$mois."/".$annee;
 	}
 ?>
