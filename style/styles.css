@@ -28,15 +28,33 @@ h1{
 	text-align: center;
 }
 
+<<<<<<< HEAD
+=======
+h1{
+	font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+	font-size: 24px;
+	font-style: normal;
+	font-variant:normal;
+	font-weight: 500;
+	line-height: 26.4px; 
+}
+
+>>>>>>> 5628b70c8a4528c0258b5d1afc4869565e850956
 h3{
 	font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
 	font-size: 14px;
 	font-style: normal;
 	font-variant:normal;
 	font-weight: 500;
+<<<<<<< HEAD
 	line-height: 15.6px;
 	display: block;
 	text-align: center;
+=======
+	line-height: 15.6px; 
+	display: block;
+	text-align: center;	
+>>>>>>> 5628b70c8a4528c0258b5d1afc4869565e850956
 }
 
 
@@ -46,11 +64,16 @@ p {
 	font-style: normal;
 	font-variant:normal;
 	font-weight: 500;
+<<<<<<< HEAD
 	line-height: 15.6px;
 
+=======
+	line-height: 15.6px; 
+		
+>>>>>>> 5628b70c8a4528c0258b5d1afc4869565e850956
 	padding: 10px;
 	display: block;
-	text-align: center;
+	text-align: center;	
 }
 
 .important {
