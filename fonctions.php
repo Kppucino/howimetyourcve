@@ -502,7 +502,7 @@
 	    return $str;
 	}
 
-	function getListCVE($editeur, $faille, $status, $page)
+	function getListCVE($editeur, $faille, $status, $page, $idUser)
 	{
 			include("SQLQuery.php");
 
@@ -585,11 +585,22 @@
 				}
 			}
 
-			createListCVE($listCVE);
+			if (!empty($idUser))
+			{
+				createListCVE($listCVE, $idUser);
+			}
+			else
+			{
+				createListCVE($listCVE, "");
+			}
 	}
 
-	function createListCVE($listCVE)
+	function createListCVE($listCVE, $idUser)
 	{
+		include("SQLQuery.php");
+
+		$favoris = queryFetchWith1Value($queryGetFavorisUser, ":idUser", $idUser);
+
 		echo '<tbody>';
 
 		if (empty($listCVE) || $listCVE == "erreur")
@@ -653,9 +664,24 @@
 					echo '</a>';
 					echo '</div>';
 					echo '<td>';
-					echo '<a href="javascript:;" class="star">';
-					echo '<i class="glyphicon glyphicon-star"></i>';
-					echo '</a>';
+
+					if (searchIfFavoris($favoris, $listCVE[$i]["idCve"]))
+					{
+						echo '<a class="star favoris">';
+						echo '<input type="hidden" name="idCve" value="'.$listCVE[$i]["idCve"].'"></input>';
+						echo '<input type="hidden" name="favoris" value="1"></input>';
+						echo '<i class="glyphicon glyphicon-star"></i>';
+						echo '</a>';
+					}
+					else
+					{
+						echo '<a class="star">';
+						echo '<input type="hidden" name="idCve" value="'.$listCVE[$i]["idCve"].'"></input>';
+						echo '<input type="hidden" name="favoris" value="0"></input>';
+						echo '<i class="glyphicon glyphicon-star"></i>';
+						echo '</a>';
+					}
+
 					echo '</td>';
 					echo '</td>';
 					echo '</tr>';
@@ -970,5 +996,67 @@
 		$jour = substr($date, 8, 2);
 
 		return $jour."/".$mois."/".$annee;
+	}
+
+	function checkifUserExist($user, $mdp)
+	{
+		include("SQLQuery.php");
+
+		$user = htmlspecialchars($user);
+		$mdp = htmlspecialchars($mdp);
+
+		$userInfo = queryFetchWith1Value($queryGetUserByName, ":nomUser", $user);
+
+		if (!empty($userInfo))
+		{
+			if (hash('sha256', $mdp) == $userInfo[0]["passwordUser"])
+			{
+				return $userInfo;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function createUser($email, $user, $password, $password1)
+	{
+		include("SQLQuery.php");
+
+		$email = htmlspecialchars($email);
+		$user = htmlspecialchars($user);
+		$password = hash('sha256', htmlspecialchars($password));
+		$password1 = hash('sha256', htmlspecialchars($password1));
+
+		if (filter_var($email, FILTER_VALIDATE_EMAIL))
+		{
+			if($password == $password1)
+			{
+				$idUser = queryExecuteWith3Value($queryInsertUser, ":nomUser", $user, ":mailUser", $email, ":passwordUser", $password, true);
+				return queryFetchWith1Value($queryGetUserByIdUser, ":idUser", $idUser);
+			}
+		}
+
+		return false;
+	}
+
+	function searchIfFavoris($arrayFavoris, $value)
+	{
+		$favoris = false;
+
+		for ($i=0; $i < sizeof($arrayFavoris); $i++)
+		{
+			if ($value == $arrayFavoris[$i]["idCve"])
+			{
+				$favoris = true;
+			}
+		}
+
+		return $favoris;
 	}
 ?>

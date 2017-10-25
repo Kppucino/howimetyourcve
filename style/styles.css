@@ -157,13 +157,19 @@ span.multiselect-native-select select {
 	text-align: center;
 	display: block;
 }
-.table-filter .star.star-checked {
+
+.table-filter .favoris
+{
+	color: #F0AD4E;
+}
+
+.table-filter .star .star-checked {
 	color: #F0AD4E;
 }
 .table-filter .star:hover {
-	color: #ccc;
+	color: #F0AD4E;
 }
-.table-filter .star.star-checked:hover {
+.table-filter .star .star-checked:hover {
 	color: #F0AD4E;
 }
 .table-filter .media-photo {

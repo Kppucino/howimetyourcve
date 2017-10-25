@@ -138,10 +138,6 @@
 
 	$(document).ready(function ()
 	{
-		$('.star').on('click', function () {
-	      $(this).toggleClass('star-checked');
-	    });
-
 		$.ajax({
 				url: "ajax.php",
 				type : 'POST',
@@ -317,6 +313,28 @@
 						{
 							$('.next').prop('disabled', true);
 						}
+				}
+		});
+	});
+
+	$(document).on('click', '.star', function()
+	{
+		$.ajax({
+				url: "ajax.php",
+				type : 'POST',
+				context: this,
+				data : "favoris=" + $(this).closest('.star').find('input[name="favoris"]').val() + "&idCve=" + $(this).closest('.star').find('input[name="idCve"]').val(),
+
+				success : function()
+				{
+					if ($(this).closest('.star').find('input[name="favoris"]').val() == 1)
+					{
+						$(this).removeClass('favoris');
+					}
+					else
+					{
+						$(this).addClass('favoris');
+					}
 				}
 		});
 	});

@@ -45,8 +45,91 @@
         <li><a href="index.php">CVE</a></li>
         <li><a href="presentation.php">Présentation</a></li>
         <li><a href="#">Sources</a></li>
-        <li><a href="#">Connexion</a></li>
+        <li><a  href="#signup" data-toggle="modal" data-target=".bs-modal-sm">Connexion</a></li>
       </ul>
     </div>
   </nav>
 </header>
+
+<div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        <br>
+        <div class="bs-example bs-example-tabs">
+            <ul id="myTab" class="nav nav-tabs">
+              <li class="active"><a href="#signin" data-toggle="tab">Connexion</a></li>
+              <li class=""><a href="#signup" data-toggle="tab">Créer un compte</a></li>
+            </ul>
+        </div>
+      <div class="modal-body">
+        <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in" id="signin">
+            <form class="form-horizontal" method="post" action="login.php?action=connexion">
+            <fieldset>
+            <div class="control-group">
+              <label class="control-label" for="userid">Identifiant:</label>
+              <div class="controls">
+                <input required="" id="userid" name="userid" type="text" class="form-control" placeholder="Captain Crunch" class="input-medium" required="">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="passwordinput">Mot de passe:</label>
+              <div class="controls">
+                <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="signin"></label>
+              <div class="controls">
+                <button id="signin" name="signin" class="btn btn-success">Se connecter</button>
+              </div>
+            </div>
+            </fieldset>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="signup">
+            <form class="form-horizontal" method="post" action="login.php?action=inscription">
+            <fieldset>
+            <div class="control-group">
+              <label class="control-label" for="Email">Email:</label>
+              <div class="controls">
+                <input id="Email" name="Email" class="form-control" type="text" placeholder="c0mrade@nasa.com" class="input-large" required="">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="userid">Identifiant:</label>
+              <div class="controls">
+                <input id="userid" name="userid" class="form-control" type="text" placeholder="c0mrade" class="input-large" required="">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="password">Mot de passe:</label>
+              <div class="controls">
+                <input id="password" name="password" class="form-control" type="password" placeholder="********" class="input-large" required="">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="reenterpassword">Re-saisir mot de passe:</label>
+              <div class="controls">
+                <input id="reenterpassword" class="form-control" name="reenterpassword" type="password" placeholder="********" class="input-large" required="">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="confirmsignup"></label>
+              <div class="controls">
+                <button id="confirmsignup" name="confirmsignup" class="btn btn-success">S'inscrire</button>
+              </div>
+            </div>
+            </fieldset>
+            </form>
+      </div>
+    </div>
+      </div>
+      <div class="modal-footer">
+      <center>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        </center>
+      </div>
+    </div>
+  </div>
+</div>
