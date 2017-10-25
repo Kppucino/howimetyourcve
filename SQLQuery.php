@@ -12,6 +12,7 @@
   $queryCheckIfExistInCveUser = "SELECT COUNT(*) FROM link_cve_user WHERE idUser = :idUser AND idCve = :idCve";
   $queryUpdateFavorisUserCve = "UPDATE link_cve_user SET favoris = :favoris WHERE idUser = :idUser AND idCve = :idCve";
   $queryInsertFavorisUserCve = "INSERT INTO link_cve_user(idUser, idCve, favoris) VALUES (:idUser, :idCve, :favoris)";
+  $queryDeleteEmptyLineLinkCveUser = "DELETE FROM link_cve_user WHERE (favoris IS NULL OR favoris = 0) AND commentaire IS NULL";
 
   $queryGetNbAllCVEWithEditor = "SELECT COUNT(cve.idCve) AS Nb FROM cve, editeur WHERE cve.idEditeur = editeur.idEditeur ORDER BY dateCve DESC, statusCve";
   $queryGetNbAllCVEWithSomeEditor = "SELECT COUNT(cve.idCve) AS Nb FROM cve, editeur WHERE cve.idEditeur = editeur.idEditeur AND editeur.idEditeur IN (:arrayIdEditeur) ORDER BY dateCve DESC, statusCve";

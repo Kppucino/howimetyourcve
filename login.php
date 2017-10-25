@@ -13,7 +13,6 @@
         if ($user != false)
         {
           session_unset();
-          session_start();
 
           $_SESSION['idUser'] = $user[0]["idUser"];
           $_SESSION['nomUser'] = $user[0]["nomUser"];
@@ -33,9 +32,7 @@
 
           if ($user != false)
           {
-
             session_unset();
-            session_start();
 
             $_SESSION['idUser'] = $user[0]["idUser"];
             $_SESSION['nomUser'] = $user[0]["nomUser"];

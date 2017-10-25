@@ -1,5 +1,5 @@
 <?php
-function redirect($url, $time=1)
+function redirect($url, $time=0)
 {
 	//On vérifie si aucun entête n'a déjà été envoyé
 	if (!headers_sent())  {

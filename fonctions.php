@@ -157,7 +157,8 @@
 		include("include/_inc_parametres.php");
 		include("include/_inc_connexion.php");
 
-		$query->execute();
+		$query_preparation = $cnx->prepare($query);
+		$query_preparation->execute();
 
 		if ($lastInsertId == true)
 		{

@@ -322,8 +322,8 @@
 		$.ajax({
 				url: "ajax.php",
 				type : 'POST',
-				context: this,
 				data : "favoris=" + $(this).closest('.star').find('input[name="favoris"]').val() + "&idCve=" + $(this).closest('.star').find('input[name="idCve"]').val(),
+				context: this,
 
 				success : function()
 				{

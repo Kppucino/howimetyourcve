@@ -44,7 +44,6 @@
       <ul class="nav navbar-nav navbar-right">
         <li><a href="index.php">CVE</a></li>
         <li><a href="presentation.php">Présentation</a></li>
-        <li><a href="#">Sources</a></li>
         <li><a  href="#signup" data-toggle="modal" data-target=".bs-modal-sm">Connexion</a></li>
       </ul>
     </div>

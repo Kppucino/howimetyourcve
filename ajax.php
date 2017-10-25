@@ -132,6 +132,7 @@
 	}
 	else if (isset($_SESSION['idUser']) && isset($_POST['favoris']) && isset($_POST['idCve']))
 	{
+		queryExecuteWithoutValue($queryDeleteEmptyLineLinkCveUser, false);
 		$exist = queryFetchWith2Value($queryCheckIfExistInCveUser, ":idUser", $_SESSION['idUser'], ":idCve", $_POST['idCve']);
 
 		if ($_POST['favoris'] == 0)
@@ -142,6 +143,8 @@
 		{
 			$favoris = 0;
 		}
+
+		var_dump($favoris);
 
 		if ($exist[0]["COUNT(*)"] != 0)
 		{
