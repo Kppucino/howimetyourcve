@@ -170,7 +170,18 @@
           echo '<p>'.$cve[0]["descriptionCve"].'</p>';
           echo '</div>';
 
-          //PARTIE COMMENTAIRE USER
+          if (isset($_SESSION['idUser']))
+					{
+						$commentaire = queryFetchWith2Value($queryGetCommentaireCveUser, ":idUser", $_SESSION['idUser'], ":idCve", $cve[0]["idCve"]);
+
+						if(!empty($commentaire))
+						{
+							echo '<div class="descriptionCve">';
+		          echo '<h3>Commentaire : </h3>';
+		          echo '<p>'.$commentaire[0]["commentaire"].'</p>';
+		          echo '</div>';
+						}
+					}
 
           if (!empty($reference))
           {

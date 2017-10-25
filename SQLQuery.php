@@ -45,14 +45,17 @@
   $queryGetEditeur = "SELECT * FROM editeur";
   $queryGetRandEditor = "SELECT * FROM editeur ORDER BY rand() LIMIT 7";
   $queryGetEditeurAndCVEByIdEditeur = "SELECT * FROM editeur WHERE editeur.idEditeur = :idEditeur";
+  $queryGetCommentaireEditeurUser = "SELECT * FROM link_editeur_user WHERE idUser = :idUser AND idEditeur = :idEditeur";
 
   $queryGetFaille = "SELECT * FROM faille";
   $queryGetRandFaille = "SELECT * FROM faille ORDER BY rand() LIMIT 7";
   $queryGetFailleAndTypeById = "SELECT * FROM faille, typefaille WHERE faille.idType = typeFaille.idType AND faille.idFaille = :idFaille";
+  $queryGetCommentaireFailleUser = "SELECT * FROM link_faille_user WHERE idUser = :idUser AND idFaille = :idFaille";
 
   $queryGetCVEByIdCve = "SELECT * FROM cve, editeur WHERE cve.idCve = :idCve AND cve.idEditeur = editeur.idEditeur";
   $queryGetReferenceCVEByIdCVE = "SELECT * FROM cve, link_cve_reference, reference WHERE cve.idCve = :idCve AND cve.idCve = link_cve_reference.idCve AND link_cve_reference.idReference = reference.idReference";
   $queryGetFailleCVEByIdCVE = "SELECT * FROM cve, link_cve_faille, faille WHERE cve.idCve = :idCve AND cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille = faille.idFaille";
+  $queryGetCommentaireCveUser = "SELECT * FROM link_cve_user WHERE idUser = :idUser AND idCve = :idCve";
 
   $queryGetUserByName= "SELECT * FROM user WHERE nomUser = :nomUser";
   $queryGetUserByIdUser= "SELECT * FROM user WHERE idUser = :idUser";

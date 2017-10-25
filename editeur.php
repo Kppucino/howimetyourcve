@@ -54,7 +54,18 @@
             echo '</div>';
 					}
 
-          //PARTIE COMMENTAIRE USER
+          if (isset($_SESSION['idUser']))
+          {
+            $commentaire = queryFetchWith2Value($queryGetCommentaireEditeurUser, ":idUser", $_SESSION['idUser'], ":idEditeur", $editeur[0]["idEditeur"]);
+
+            if(!empty($commentaire))
+            {
+              echo '<div class="descriptionCve">';
+              echo '<h3>Commentaire : </h3>';
+              echo '<p>'.$commentaire[0]["commentaire"].'</p>';
+              echo '</div>';
+            }
+          }
         }
       }
 			include("footer.php");
