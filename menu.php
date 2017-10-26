@@ -32,9 +32,9 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <div class="col-sm-3 col-md-3">
-          <form class="navbar-form" role="search">
+          <form class="navbar-form" role="search" method="post" action="search.php">
           <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search" name="q">
+              <input type="text" class="form-control" placeholder="Search" name="search">
               <div class="input-group-btn">
                   <button class="btn btn-default searchIcon" type="submit"><i class="glyphicon glyphicon-search"></i></button>
               </div>

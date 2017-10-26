@@ -14,7 +14,7 @@
 
 		if (isset($_POST['editeur']) && isset($_POST['faille']) && isset($_POST['status']))
 		{
-				$nbPage = ceil(getNbCVE(json_decode($_POST['editeur']), json_decode($_POST['faille']), $_POST['status'])[0]["Nb"]/25);
+				$nbPage = ceil(getNbCVE(json_decode($_POST['editeur']), json_decode($_POST['faille'], ""), $_POST['status'])[0]["Nb"]/25);
 		}
 		else if (isset($_POST['editeur']) && isset($_POST['faille']) && !isset($_POST['status']))
 		{
@@ -22,19 +22,19 @@
 		}
 		else if (isset($_POST['editeur']) && !isset($_POST['faille']) && isset($_POST['status']))
 		{
-				$nbPage = ceil(getNbCVE(json_decode($_POST['editeur']), "", $_POST['status'])[0]["Nb"]/25);
+				$nbPage = ceil(getNbCVE(json_decode($_POST['editeur']), "", $_POST['status'], "")[0]["Nb"]/25);
 		}
 		else if (!isset($_POST['editeur']) && isset($_POST['faille']) && isset($_POST['status']))
 		{
-				$nbPage = ceil(getNbCVE("", json_decode($_POST['faille']), $_POST['status'])[0]["Nb"]/25);
+				$nbPage = ceil(getNbCVE("", json_decode($_POST['faille']), $_POST['status'], "")[0]["Nb"]/25);
 		}
 		else if (!isset($_POST['editeur']) && !isset($_POST['faille']) && isset($_POST['status']))
 		{
-				$nbPage = ceil(getNbCVE("", "", $_POST['status'])[0]["Nb"]/25);
+				$nbPage = ceil(getNbCVE("", "", $_POST['status'], "")[0]["Nb"]/25);
 		}
 		else
 		{
-				$nbPage = ceil(getNbCVE("", "", "")[0]["Nb"]/25);
+				$nbPage = ceil(getNbCVE("", "", "", "")[0]["Nb"]/25);
 		}
 
 		if (isset($_POST["previous"]))
@@ -66,33 +66,33 @@
 
 		if ($_POST["createTable"] == "empty")
 		{
-			return getListCVE("", "", "", $page, $idUser);
+			return getListCVE("", "", "", $page, $idUser, "");
 		}
 		else
 		{
 			if (isset($_POST['editeur']) && isset($_POST['faille']) && isset($_POST['status']))
 			{
-					return getListCVE(json_decode($_POST['editeur']), json_decode($_POST['faille']), $_POST['status'], $page, $idUser);
+					return getListCVE(json_decode($_POST['editeur']), json_decode($_POST['faille']), $_POST['status'], $page, $idUser, "");
 			}
 			else if (isset($_POST['editeur']) && isset($_POST['faille']) && !isset($_POST['status']))
 			{
-					return getListCVE(json_decode($_POST['editeur']), json_decode($_POST['faille']), "", $page, $idUser);
+					return getListCVE(json_decode($_POST['editeur']), json_decode($_POST['faille']), "", $page, $idUser, "");
 			}
 			else if (isset($_POST['editeur']) && !isset($_POST['faille']) && isset($_POST['status']))
 			{
-					return getListCVE(json_decode($_POST['editeur']), "", $_POST['status'], $page, $idUser);
+					return getListCVE(json_decode($_POST['editeur']), "", $_POST['status'], $page, $idUser, "");
 			}
 			else if (!isset($_POST['editeur']) && isset($_POST['faille']) && isset($_POST['status']))
 			{
-					return getListCVE("", json_decode($_POST['faille']), $_POST['status'], $page, $idUser);
+					return getListCVE("", json_decode($_POST['faille']), $_POST['status'], $page, $idUser, "");
 			}
 			else if (!isset($_POST['editeur']) && !isset($_POST['faille']) && isset($_POST['status']))
 			{
-					return getListCVE("", "", $_POST['status'], $page, $idUser);
+					return getListCVE("", "", $_POST['status'], $page, $idUser, "");
 			}
 			else
 			{
-					return getListCVE("", "", "", $page, $idUser);
+					return getListCVE("", "", "", $page, $idUser, "");
 			}
 		}
 	}
@@ -144,8 +144,6 @@
 			$favoris = 0;
 		}
 
-		var_dump($favoris);
-
 		if ($exist[0]["COUNT(*)"] != 0)
 		{
 			queryExecuteWith3Value($queryUpdateFavorisUserCve, ":idUser", $_SESSION['idUser'], ":idCve", $_POST['idCve'], ":favoris", $favoris, false);
@@ -154,5 +152,9 @@
 		{
 			queryExecuteWith3Value($queryInsertFavorisUserCve, ":idUser", $_SESSION['idUser'], ":idCve", $_POST['idCve'], ":favoris", $favoris, false);
 		}
+	}
+	else if (isset($_POST["search"]))
+	{
+
 	}
 ?>

@@ -497,93 +497,101 @@
 	    $str = htmlentities($str, ENT_NOQUOTES, $charset);
 
 	    $str = preg_replace('#&([A-za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $str);
-	    $str = preg_replace('#&([A-za-z]{2})(?:lig);#', '\1', $str); // pour les ligatures e.g. '&oelig;'
-	    $str = preg_replace('#&[^;]+;#', '', $str); // supprime les autres caractères
+	    $str = preg_replace('#&([A-za-z]{2})(?:lig);#', '\1', $str);
+	    $str = preg_replace('#&[^;]+;#', '', $str);
 
 	    return $str;
 	}
 
-	function getListCVE($editeur, $faille, $status, $page, $idUser)
+	function getListCVE($editeur, $faille, $status, $page, $idUser, $search)
 	{
 			include("SQLQuery.php");
 
-			$page = $page * 25;
+			if (!empty($search))
+			{
+					$page = $page * 10;
+					$listCVE = queryFetchWith2Value($queryGetCveEditorByNameCve, ":nomCve", '%'.$search.'%', ":offset", $page);
+			}
+			else
+			{
+					$page = $page * 25;
 
-			if (empty($editeur) && empty($faille) && empty($status))
-			{
-				$listCVE = queryFetchWith1Value($queryGetAllCVEWithEditor, ":offset", $page);
-			}
-			else if (!empty($editeur) && empty($faille) && empty($status))
-			{
-				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur, ":offset", $page);
-			}
-			else if (empty($editeur) && !empty($faille) && empty($status))
-			{
-				$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille, ":offset", $page);
-			}
-			else if (empty($editeur) && empty($faille) && !empty($status))
-			{
-				if ($status == "all")
-				{
-					$listCVE = queryFetchWith1Value($queryGetAllCVEWithEditor, ":offset", $page);
-				}
-				else if ($status == "open")
-				{
-					$listCVE = queryFetchWith2Value($queryGetAllCVEWithStatus, ":statusCve", 1, ":offset", $page);
-				}
-				else if ($status == "close")
-				{
-					$listCVE = queryFetchWith2Value($queryGetAllCVEWithStatus, ":statusCve", 0, ":offset", $page);
-				}
-			}
-			else if (!empty($editeur) && !empty($faille) && empty($status))
-			{
-				$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":offset", $page);
-			}
-			else if (!empty($editeur) && empty($faille) && !empty($status))
-			{
-				if ($status == "all")
-				{
-					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur, ":offset", $page);
-				}
-				else if ($status == "open")
-				{
-					$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1, ":offset", $page);
-				}
-				else if ($status == "close")
-				{
-					$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0, ":offset", $page);
-				}
-			}
-			else if (empty($editeur) && !empty($faille) && !empty($status))
-			{
-				if ($status == "all")
-				{
-					$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille, ":offset", $page);
-				}
-				else if ($status == "open")
-				{
-					$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1, ":offset", $page);
-				}
-				else if ($status == "close")
-				{
-					$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 0, ":offset", $page);
-				}
-			}
-			else if (!empty($editeur) && !empty($faille) && !empty($status))
-			{
-				if ($status == "all")
-				{
-					$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":offset", $page);
-				}
-				else if ($status == "open")
-				{
-					$listCVE = queryFetchWith2ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 1, ":offset", $page);
-				}
-				else if ($status == "close")
-				{
-					$listCVE = queryFetchWith2ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0, ":offset", $page);
-				}
+					if (empty($editeur) && empty($faille) && empty($status))
+					{
+						$listCVE = queryFetchWith1Value($queryGetAllCVEWithEditor, ":offset", $page);
+					}
+					else if (!empty($editeur) && empty($faille) && empty($status))
+					{
+						$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur, ":offset", $page);
+					}
+					else if (empty($editeur) && !empty($faille) && empty($status))
+					{
+						$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille, ":offset", $page);
+					}
+					else if (empty($editeur) && empty($faille) && !empty($status))
+					{
+						if ($status == "all")
+						{
+							$listCVE = queryFetchWith1Value($queryGetAllCVEWithEditor, ":offset", $page);
+						}
+						else if ($status == "open")
+						{
+							$listCVE = queryFetchWith2Value($queryGetAllCVEWithStatus, ":statusCve", 1, ":offset", $page);
+						}
+						else if ($status == "close")
+						{
+							$listCVE = queryFetchWith2Value($queryGetAllCVEWithStatus, ":statusCve", 0, ":offset", $page);
+						}
+					}
+					else if (!empty($editeur) && !empty($faille) && empty($status))
+					{
+						$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":offset", $page);
+					}
+					else if (!empty($editeur) && empty($faille) && !empty($status))
+					{
+						if ($status == "all")
+						{
+							$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur, ":offset", $page);
+						}
+						else if ($status == "open")
+						{
+							$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1, ":offset", $page);
+						}
+						else if ($status == "close")
+						{
+							$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0, ":offset", $page);
+						}
+					}
+					else if (empty($editeur) && !empty($faille) && !empty($status))
+					{
+						if ($status == "all")
+						{
+							$listCVE = queryFetchWith1ArrayAnd1Value($queryGetAllCVEWithSomeFaille, ":arrayIdFaille", $faille, ":offset", $page);
+						}
+						else if ($status == "open")
+						{
+							$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1, ":offset", $page);
+						}
+						else if ($status == "close")
+						{
+							$listCVE = queryFetchWith1ArrayAnd2Value($queryGetAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 0, ":offset", $page);
+						}
+					}
+					else if (!empty($editeur) && !empty($faille) && !empty($status))
+					{
+						if ($status == "all")
+						{
+							$listCVE = queryFetchWith2ArrayAnd1Value($queryGetAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":offset", $page);
+						}
+						else if ($status == "open")
+						{
+							$listCVE = queryFetchWith2ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 1, ":offset", $page);
+						}
+						else if ($status == "close")
+						{
+							$listCVE = queryFetchWith2ArrayAnd2Value($queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $editeur, ":statusCve", 0, ":offset", $page);
+						}
+					}
 			}
 
 			if (!empty($idUser))
@@ -593,6 +601,30 @@
 			else
 			{
 				createListCVE($listCVE, "");
+			}
+	}
+
+	function getListEditeur($page, $search)
+	{
+			include("SQLQuery.php");
+
+			if (!empty($search))
+			{
+					$page = $page * 10;
+					$listEditeur = queryFetchWith2Value($queryGetEditeurByName, ":nomEditeur", '%'.$search.'%', ":offset", $page);
+					createListEditeur($listEditeur);
+			}
+	}
+
+	function getListFaille($page, $search)
+	{
+			include("SQLQuery.php");
+
+			if (!empty($search))
+			{
+					$page = $page * 10;
+					$listFaille = queryFetchWith2Value($queryGetFailleByName, ":nomFaille", '%'.$search.'%', ":offset", $page);
+					createListFaille($listFaille);
 			}
 	}
 
@@ -691,26 +723,132 @@
 		echo '</tbody>';
 	}
 
+	function createListEditeur($listEditeur)
+	{
+		include("SQLQuery.php");
+		echo '<tbody>';
+
+		if (empty($listEditeur) || $listEditeur == "erreur")
+		{
+				echo '<tr data-status="">';
+				echo '<td>';
+				echo '<div class="media">';
+				echo '<div class="media-body">';
+				echo '<span class="media-meta pull-right"></span>';
+				echo '<h4 class="title">';
+				echo 'Aucun résultat à afficher';
+				echo '<span class="pull-right pagado"></span>';
+				echo '</h4>';
+				echo '<p class="summary"></p>';
+				echo '</div>';
+				echo '</div>';
+				echo '</td>';
+				echo '</tr>';
+		}
+		else
+		{
+			for ($i=0; $i < sizeof($listEditeur); $i++)
+			{
+					echo '<td>';
+					echo '<div class="media">';
+
+					if (isset($listEditeur[$i]["logoEditeur"]))
+					{
+							echo '<a href="editeur.php?idEditeur='.$listEditeur[$i]["idEditeur"].'" class="pull-left">';
+							echo '<img src="images/logoEditeur/'.$listEditeur[$i]["logoEditeur"].'" class="media-photo"></img>';
+							echo '</a>';
+					}
+
+					echo '<div class="media-body">';
+					echo '<a href="editeur.php?idEditeur='.$listEditeur[$i]["idEditeur"].'">';
+					echo '<h4 class="title">';
+					echo $listEditeur[$i]["nomEditeur"];
+					echo '</h4>';
+					echo '<p class="summary">'.substr($listEditeur[$i]["descriptionEditeur"], 0, 100).'</p>';
+					echo '</div>';
+					echo '</a>';
+					echo '</div>';
+					echo '<td>';
+					echo '</td>';
+					echo '</td>';
+					echo '</tr>';
+			}
+		}
+		echo '</tbody>';
+	}
+
+	function createListFaille($listFaille)
+	{
+		include("SQLQuery.php");
+		echo '<tbody>';
+
+		if (empty($listFaille) || $listFaille == "erreur")
+		{
+				echo '<tr data-status="">';
+				echo '<td>';
+				echo '<div class="media">';
+				echo '<div class="media-body">';
+				echo '<span class="media-meta pull-right"></span>';
+				echo '<h4 class="title">';
+				echo 'Aucun résultat à afficher';
+				echo '<span class="pull-right pagado"></span>';
+				echo '</h4>';
+				echo '<p class="summary"></p>';
+				echo '</div>';
+				echo '</div>';
+				echo '</td>';
+				echo '</tr>';
+		}
+		else
+		{
+			for ($i=0; $i < sizeof($listFaille); $i++)
+			{
+					echo '<td>';
+					echo '<div class="media">';
+					echo '<div class="media-body">';
+					echo '<a href="faille.php?idFaille='.$listFaille[$i]["idFaille"].'">';
+					echo '<h4 class="title">';
+					echo $listFaille[$i]["nomFaille"];
+
+					if (!empty($listFaille[$i]["nomType"]))
+					{
+							echo '<span class="pull-right">'.$listFaille[$i]["nomType"].'</span>';
+					}
+
+					echo '</h4>';
+					echo '<p class="summary">'.substr($listFaille[$i]["descriptionFaille"], 0, 100).'</p>';
+					echo '</div>';
+					echo '</a>';
+					echo '</div>';
+					echo '<td>';
+					echo '</td>';
+					echo '</td>';
+					echo '</tr>';
+			}
+		}
+		echo '</tbody>';
+	}
+
 	function getStatCVE($editeur, $faille, $status)
 	{
 			include("SQLQuery.php");
 
 			if (empty($editeur) && empty($faille) && empty($status))
 			{
-				$nbCVE = getNbCVE("", "", "");
+				$nbCVE = getNbCVE("", "", "", "");
 				$topFailleCVE = queryFetchWithoutValue($queryGetTopFailleAllCVE);
 				$topEditeurCVE = queryFetchWithoutValue($queryGetTopEditeurAllCVE);
 				$moyenneCVE = queryFetchWithoutValue($queryGetAVGAllCVE);
 			}
 			else if (!empty($editeur) && empty($faille) && empty($status))
 			{
-				$nbCVE = getNbCVE($editeur, "", "");
+				$nbCVE = getNbCVE($editeur, "", "", "");
 				$topFailleCVE = queryFetchWith1ArrayValue($queryGetTopFailleAllCVEWithEditor, ":arrayIdEditeur", $editeur);
 				$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
 			}
 			else if (empty($editeur) && !empty($faille) && empty($status))
 			{
-				$nbCVE = getNbCVE("", $faille, "");
+				$nbCVE = getNbCVE("", $faille, "", "");
 				$topEditeurCVE = queryFetchWith1ArrayValue($queryGetTopEditeurAllCVEWithFaille, ":arrayIdFaille", $faille);
 				$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
 			}
@@ -718,21 +856,21 @@
 			{
 				if ($status == "all")
 				{
-					$nbCVE = getNbCVE("", "", "");
+					$nbCVE = getNbCVE("", "", "", "");
 					$topFailleCVE = queryFetchWithoutValue($queryGetTopFailleAllCVE);
 					$topEditeurCVE = queryFetchWithoutValue($queryGetTopEditeurAllCVE);
 					$moyenneCVE = queryFetchWithoutValue($queryGetAVGAllCVE);
 				}
 				else if ($status == "open")
 				{
-					$nbCVE = getNbCVE("", "", $status);
+					$nbCVE = getNbCVE("", "", $status, "");
 					$topFailleCVE = queryFetchWith1Value($queryGetTopFailleAllCVEWithStatus, ":statusCve", 1);
 					$topEditeurCVE = queryFetchWith1Value($queryGetTopEditeurAllCVEWithStatus, ":statusCve", 1);
 					$moyenneCVE = queryFetchWith1Value($queryGetAVGAllCVEWithStatus, ":statusCve", 1);
 				}
 				else if ($status == "close")
 				{
-					$nbCVE = getNbCVE("", "", $status);
+					$nbCVE = getNbCVE("", "", $status, "");
 					$topFailleCVE = queryFetchWith1Value($queryGetTopFailleAllCVEWithStatus, ":statusCve", 0);
 					$topEditeurCVE = queryFetchWith1Value($queryGetTopEditeurAllCVEWithStatus, ":statusCve", 0);
 					$moyenneCVE = queryFetchWith1Value($queryGetAVGAllCVEWithStatus, ":statusCve", 0);
@@ -740,26 +878,26 @@
 			}
 			else if (!empty($editeur) && !empty($faille) && empty($status))
 			{
-				$nbCVE = getNbCVE($editeur, $faille, "");
+				$nbCVE = getNbCVE($editeur, $faille, "", "");
 				$moyenneCVE = queryFetchWith2ArrayValue($queryGetAVGAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
 			}
 			else if (!empty($editeur) && empty($faille) && !empty($status))
 			{
 				if ($status == "all")
 				{
-					$nbCVE = getNbCVE($editeur, "", "");
+					$nbCVE = getNbCVE($editeur, "", "", "");
 					$topFailleCVE = queryFetchWith1ArrayValue($queryGetTopFailleAllCVEWithEditor, ":arrayIdEditeur", $editeur);
 					$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeEditor, ":arrayIdEditeur", $editeur);
 				}
 				else if ($status == "open")
 				{
-					$nbCVE = getNbCVE($editeur, "", $status);
+					$nbCVE = getNbCVE($editeur, "", $status, "");
 					$topFailleCVE = queryFetchWith1ArrayAnd1Value($queryGetTopFailleAllCVEWithEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1);
 					$moyenneCVE = queryFetchWith1ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 1);
 				}
 				else if ($status == "close")
 				{
-					$nbCVE = getNbCVE($editeur, "", $status);
+					$nbCVE = getNbCVE($editeur, "", $status, "");
 					$topFailleCVE = queryFetchWith1ArrayAnd1Value($queryGetTopFailleAllCVEWithEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0);
 					$moyenneCVE = queryFetchWith1ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndStatus, ":arrayIdEditeur", $editeur, ":statusCve", 0);
 				}
@@ -768,19 +906,19 @@
 			{
 				if ($status == "all")
 				{
-					$nbCVE = getNbCVE("", $faille, $status);
+					$nbCVE = getNbCVE("", $faille, $status, "");
 					$topEditeurCVE = queryFetchWith1ArrayValue($queryGetTopEditeurAllCVEWithFaille, ":arrayIdFaille", $faille);
 					$moyenneCVE = queryFetchWith1ArrayValue($queryGetAVGAllCVEWithSomeFaille, ":arrayIdFaille", $faille);
 				}
 				else if ($status == "open")
 				{
-					$nbCVE = getNbCVE("", $faille, $status);
+					$nbCVE = getNbCVE("", $faille, $status, "");
 					$topEditeurCVE = queryFetchWith1ArrayAnd1Value($queryGetTopEditeurAllCVEWithFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1);
 					$moyenneCVE = queryFetchWith1ArrayAnd1Value($queryGetAVGAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 1);
 				}
 				else if ($status == "close")
 				{
-					$nbCVE = getNbCVE("", $faille, $status);
+					$nbCVE = getNbCVE("", $faille, $status, "");
 					$topEditeurCVE = queryFetchWith1ArrayAnd1Value($queryGetTopEditeurAllCVEWithFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 0);
 					$moyenneCVE = queryFetchWith1ArrayAnd1Value($queryGetAVGAllCVEWithSomeFailleAndStatus, ":arrayIdFaille", $faille, ":statusCve", 0);
 				}
@@ -789,17 +927,17 @@
 			{
 				if ($status == "all")
 				{
-					$nbCVE = getNbCVE($editeur, $faille, "");
+					$nbCVE = getNbCVE($editeur, $faille, "", "");
 					$moyenneCVE = queryFetchWith2ArrayValue($queryGetAVGAllCVEWithSomeEditorAndSomeFaille, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille);
 				}
 				else if ($status == "open")
 				{
-					$nbCVE = getNbCVE($editeur, $faille, $status);
+					$nbCVE = getNbCVE($editeur, $faille, $status, "");
 					$moyenneCVE = queryFetchWith2ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":statusCve", 1);
 				}
 				else if ($status == "close")
 				{
-					$nbCVE = getNbCVE($editeur, $faille, $status);
+					$nbCVE = getNbCVE($editeur, $faille, $status, "");
 					$moyenneCVE = queryFetchWith2ArrayAnd1Value($queryGetAVGAllCVEWithSomeEditorAndSomeFailleAndStatus, ":arrayIdEditeur", $editeur, ":arrayIdFaille", $faille, ":statusCve", 0);
 				}
 			}
@@ -862,11 +1000,15 @@
 		}
 	}
 
-	function getNbCVE($editeur, $faille, $status)
+	function getNbCVE($editeur, $faille, $status, $search)
 	{
 		include("SQLQuery.php");
 
-		if (empty($editeur) && empty($faille) && empty($status))
+		if (!empty($search))
+		{
+			return $nbCVE = queryFetchWith1Value($queryGetNbCveByName, ":nomCve", '%'.$search.'%');
+		}
+		else if (empty($editeur) && empty($faille) && empty($status))
 		{
 			return $nbCVE = queryFetchWithoutValue($queryGetNbAllCVEWithEditor);
 		}
@@ -1059,5 +1201,126 @@
 		}
 
 		return $favoris;
+	}
+
+	function searchForExist($search, $type)
+	{
+		include("SQLQuery.php");
+
+		if ($type == "cve")
+		{
+				if (getNbCVE("", "", "", $search)[0]["Nb"] != 0)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+		}
+		else if ($type == "editeur")
+		{
+			if (queryFetchWith1Value($queryGetNbEditeurByName, ":nomEditeur", '%'.$search.'%', $search)[0]["Nb"] != 0)
+			{
+					return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if ($type == "faille")
+		{
+			if (queryFetchWith1Value($queryGetNbFailleByName, ":nomFaille", '%'.$search.'%', $search)[0]["Nb"] != 0)
+			{
+					return true;
+			}
+			else
+			{
+					return false;
+			}
+		}
+	}
+
+	function searchFor($search, $type, $page)
+	{
+		include("SQLQuery.php");
+
+		if (isset($_SESSION['idUser']))
+		{
+			$idUser = $_SESSION['idUser'];
+		}
+		else
+		{
+			$idUser = "";
+		}
+
+		if ($type == "cve")
+		{
+				$nbPage = ceil(getNbCVE("", "", "", $search)[0]["Nb"]/10);
+		}
+		else if ($type == "editeur")
+		{
+			if (!empty(queryFetchWith1Value($queryGetNbEditeurByName, ":nomEditeur", '%'.$search.'%', $search)))
+			{
+				$nbPage = ceil(queryFetchWith1Value($queryGetNbEditeurByName, ":nomEditeur", '%'.$search.'%', $search)[0]["Nb"]/10);
+			}
+			else
+			{
+				$nbPage = 0;
+			}
+
+		}
+		else if ($type == "faille")
+		{
+			if (!empty(queryFetchWith1Value($queryGetNbFailleByName, ":nomFaille", '%'.$search.'%', $search)))
+			{
+				$nbPage = ceil(queryFetchWith1Value($queryGetNbFailleByName, ":nomFaille", '%'.$search.'%', $search)[0]["Nb"]/10);
+			}
+			else
+			{
+				$nbPage = 0;
+			}
+		}
+
+		if (isset($_POST["previous"]))
+		{
+			if ($_POST["previous"] - 1 >= 0)
+			{
+				$page = $_POST["previous"] - 1;
+			}
+			else
+			{
+				$page = $_POST["previous"];
+			}
+		}
+		else if (isset($_POST["next"]))
+		{
+			if ($_POST["next"] + 1 < $nbPage)
+			{
+				$page = $_POST["next"] + 1;
+			}
+			else
+			{
+				$page = $_POST["next"];
+			}
+		}
+		else
+		{
+			$page = 0;
+		}
+
+		if ($type == "cve")
+		{
+				getListCVE("", "", "", $page, $idUser, $search);
+		}
+		else if ($type == "editeur")
+		{
+			getListEditeur($page, $search);
+		}
+		else if ($type == "faille")
+		{
+			getListFaille($page, $search);
+		}
 	}
 ?>

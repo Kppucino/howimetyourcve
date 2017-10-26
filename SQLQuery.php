@@ -7,6 +7,7 @@
   $queryGetAllCVEWithSomeEditorAndStatus = "SELECT * FROM cve, editeur WHERE cve.idEditeur = editeur.idEditeur AND editeur.idEditeur IN (:arrayIdEditeur) AND cve.statusCve = :statusCve ORDER BY dateCve DESC LIMIT 25 OFFSET :offset";
   $queryGetAllCVEWithSomeFailleAndStatus = "SELECT DISTINCT cve.idCve, cve.nomCve, cve.dateCve, cve.statusCve, cve.descriptionCve, cve.noteBaseCve, editeur.idEditeur, editeur.nomEditeur, editeur.descriptionEditeur, editeur.logoEditeur FROM cve, link_cve_faille, editeur WHERE cve.idEditeur = editeur.idEditeur AND cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille IN (:arrayIdFaille) AND cve.statusCve = :statusCve ORDER BY dateCve DESC LIMIT 25 OFFSET :offset";
   $queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus = "SELECT DISTINCT cve.idCve, cve.nomCve, cve.dateCve, cve.statusCve, cve.descriptionCve, cve.noteBaseCve, editeur.idEditeur, editeur.nomEditeur, editeur.descriptionEditeur, editeur.logoEditeur FROM cve, link_cve_faille, editeur WHERE cve.idEditeur = editeur.idEditeur AND editeur.idEditeur IN (:arrayIdEditeur) AND cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille IN (:arrayIdFaille) AND cve.statusCve = :statusCve ORDER BY dateCve DESC LIMIT 25 OFFSET :offset";
+  $queryGetCveEditorByNameCve = "SELECT * FROM cve, editeur WHERE cve.nomCve LIKE :nomCve AND cve.idEditeur = editeur.idEditeur ORDER BY dateCve DESC, statusCve LIMIT 10 OFFSET :offset";
 
   $queryGetFavorisUser = "SELECT idCve FROM link_cve_user WHERE idUser = :idUser AND favoris = 1";
   $queryCheckIfExistInCveUser = "SELECT COUNT(*) FROM link_cve_user WHERE idUser = :idUser AND idCve = :idCve";
@@ -22,6 +23,7 @@
   $queryGetNbAllCVEWithSomeEditorAndStatus = "SELECT COUNT(cve.idCve) AS Nb FROM cve, editeur WHERE cve.idEditeur = editeur.idEditeur AND editeur.idEditeur IN (:arrayIdEditeur) AND cve.statusCve = :statusCve ORDER BY dateCve DESC";
   $queryGetNbAllCVEWithSomeFailleAndStatus = "SELECT COUNT(DISTINCT(cve.idCve)) AS Nb FROM cve, link_cve_faille WHERE cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille IN (:arrayIdFaille) AND cve.statusCve = :statusCve ORDER BY dateCve DESC";
   $queryGetNbAllCVEWithSomeEditorAndSomeFailleAndStatus = "SELECT COUNT(DISTINCT(cve.idCve)) AS Nb FROM cve, link_cve_faille, editeur WHERE cve.idEditeur = editeur.idEditeur AND editeur.idEditeur IN (:arrayIdEditeur) AND cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille IN (:arrayIdFaille) AND cve.statusCve = :statusCve ORDER BY dateCve DESC";
+  $queryGetNbCveByName = "SELECT COUNT(cve.idCve) AS Nb FROM cve WHERE cve.nomCve LIKE :nomCve";
 
   $queryGetTopFailleAllCVE = "SELECT faille.idFaille, faille.nomFaille, COUNT(DISTINCT(cve.idCve)) AS Nb FROM cve, link_cve_faille, faille WHERE cve.idCve = link_cve_faille.idCve AND  link_cve_faille.idFaille = faille.idFaille GROUP BY faille.idFaille, faille.nomFaille LIMIT 5";
   $queryGetTopFailleAllCVEWithEditor = "SELECT faille.idFaille, faille.nomFaille, COUNT(DISTINCT(cve.idCve)) AS Nb FROM cve, link_cve_faille, faille, editeur WHERE cve.idCve = link_cve_faille.idCve AND  link_cve_faille.idFaille = faille.idFaille AND cve.idEditeur = editeur.idEditeur AND editeur.idEditeur IN (:arrayIdEditeur) GROUP BY faille.idFaille, faille.nomFaille LIMIT 5";
@@ -46,11 +48,15 @@
   $queryGetRandEditor = "SELECT * FROM editeur ORDER BY rand() LIMIT 7";
   $queryGetEditeurAndCVEByIdEditeur = "SELECT * FROM editeur WHERE editeur.idEditeur = :idEditeur";
   $queryGetCommentaireEditeurUser = "SELECT * FROM link_editeur_user WHERE idUser = :idUser AND idEditeur = :idEditeur";
+  $queryGetEditeurByName = "SELECT * FROM editeur WHERE editeur.nomEditeur LIKE :nomEditeur LIMIT 10 OFFSET :offset";
+  $queryGetNbEditeurByName = "SELECT COUNT(editeur.idEditeur) AS Nb FROM editeur WHERE editeur.nomEditeur LIKE :nomEditeur";
 
   $queryGetFaille = "SELECT * FROM faille";
   $queryGetRandFaille = "SELECT * FROM faille ORDER BY rand() LIMIT 7";
   $queryGetFailleAndTypeById = "SELECT * FROM faille, typefaille WHERE faille.idType = typeFaille.idType AND faille.idFaille = :idFaille";
   $queryGetCommentaireFailleUser = "SELECT * FROM link_faille_user WHERE idUser = :idUser AND idFaille = :idFaille";
+  $queryGetFailleByName = "SELECT * FROM faille, typefaille WHERE faille.nomFaille LIKE :nomFaille AND faille.idType = typeFaille.idtype  LIMIT 10 OFFSET :offset";
+  $queryGetNbFailleByName = "SELECT COUNT(faille.nomFaille) AS Nb FROM faille WHERE faille.nomFaille LIKE :nomFaille";
 
   $queryGetCVEByIdCve = "SELECT * FROM cve, editeur WHERE cve.idCve = :idCve AND cve.idEditeur = editeur.idEditeur";
   $queryGetReferenceCVEByIdCVE = "SELECT * FROM cve, link_cve_reference, reference WHERE cve.idCve = :idCve AND cve.idCve = link_cve_reference.idCve AND link_cve_reference.idReference = reference.idReference";
