@@ -17,17 +17,12 @@
           echo '<div class="panel panel-default">';
           echo '<div class="panel-body">';
           echo '<div class="filtre row">';
-          echo '<h3 class="col-md-11">CVE</h3>';
-          echo '<div class="col-md-1">';
-          echo '<input type="hidden" value="0" name="pageCve"></input>';
-          echo '<button class="btn btn-default previous previous-cve"><i class="glyphicon glyphicon-chevron-left"></i></button>';
-          echo '<button class="btn btn-default next next-cve"><i class="glyphicon glyphicon-chevron-right"></i></button>';
-          echo '</div>';
+          echo '<h3 class="col-md-12">CVE</h3>';
           echo '</div>';
           echo '<div class="table-container">';
           echo '<table class="table table-filter table-cve">';
 
-          searchFor($search, "cve", 0);
+          searchFor($search, "cve");
 
           echo '</table>';
           echo '</div>';
@@ -42,17 +37,12 @@
           echo '<div class="panel panel-default">';
           echo '<div class="panel-body">';
           echo '<div class="filtre row">';
-          echo '<h3 class="col-md-11">Editeur</h3>';
-          echo '<div class="col-md-1">';
-          echo '<input type="hidden" value="0" name="pageEditeur"></input>';
-          echo '<button class="btn btn-default previous previous-editeur"><i class="glyphicon glyphicon-chevron-left"></i></button>';
-          echo '<button class="btn btn-default next next-editeur"><i class="glyphicon glyphicon-chevron-right"></i></button>';
-          echo '</div>';
+          echo '<h3 class="col-md-12">Editeur</h3>';
           echo '</div>';
           echo '<div class="table-container">';
           echo '<table class="table table-filter table-editeur">';
 
-          searchFor($search, "editeur", 0);
+          searchFor($search, "editeur");
 
           echo '</table>';
           echo '</div>';
@@ -67,17 +57,12 @@
           echo '<div class="panel panel-default">';
           echo '<div class="panel-body">';
           echo '<div class="filtre row">';
-          echo '<h3 class="col-md-11">Faille</h3>';
-          echo '<div class="col-md-1">';
-          echo '<input type="hidden" value="0" name="pageFaille"></input>';
-          echo '<button class="btn btn-default previous previous-faille"><i class="glyphicon glyphicon-chevron-left"></i></button>';
-          echo '<button class="btn btn-default next next-faille"><i class="glyphicon glyphicon-chevron-right"></i></button>';
-          echo '</div>';
+          echo '<h3 class="col-md-12">Faille</h3>';
           echo '</div>';
           echo '<div class="table-container">';
           echo '<table class="table table-filter table-faille">';
 
-          searchFor($search, "faille", 0);
+          searchFor($search, "faille");
 
           echo '</table>';
           echo '</div>';
@@ -90,5 +75,28 @@
 			include("footer.php");
 		?>
 </div>
+<script>
+$(document).on('click', '.star', function()
+{
+  $.ajax({
+      url: "ajax.php",
+      type : 'POST',
+      data : "favoris=" + $(this).closest('.star').find('input[name="favoris"]').val() + "&idCve=" + $(this).closest('.star').find('input[name="idCve"]').val(),
+      context: this,
+
+      success : function()
+      {
+        if ($(this).closest('.star').find('input[name="favoris"]').val() == 1)
+        {
+          $(this).removeClass('favoris');
+        }
+        else
+        {
+          $(this).addClass('favoris');
+        }
+      }
+  });
+});
+</script>
 </body>
 </html>

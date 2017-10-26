@@ -55,20 +55,50 @@
 					}
 
           if (isset($_SESSION['idUser']))
-          {
-            $commentaire = queryFetchWith2Value($queryGetCommentaireFailleUser, ":idUser", $_SESSION['idUser'], ":idFaille", $faille[0]["idFaille"]);
+					{
+						$commentaire = queryFetchWith2Value($queryGetCommentaireFailleUser, ":idUser", $_SESSION['idUser'], ":idFaille", $faille[0]["idFaille"]);
 
-            if(!empty($commentaire))
-            {
-              echo '<div class="descriptionCve">';
-              echo '<h3>Commentaire : </h3>';
-              echo '<p>'.$commentaire[0]["commentaire"].'</p>';
-              echo '</div>';
-            }
-          }
+						echo '<div class="descriptionCve row">';
+						echo '<h3>Commentaire : </h3>';
+
+						if(!empty($commentaire))
+						{
+		          echo '<textarea class="col-md-10 commentaire">'.$commentaire[0]["commentaire"].'</textarea>';
+						}
+						else
+						{
+							echo '<textarea class="col-md-10 commentaire"></textarea>';
+						}
+
+						 echo '</div>';
+					}
         }
       }
 			include("footer.php");
 		?>
+    <script>
+			$('.commentaire').keyup(function()
+			{
+			    delay(function(){
+						$.ajax({
+								url: "ajax.php",
+								type : 'POST',
+								data : {'commentaireUser':$('.commentaire').val(), 'idFailleCommentaire': <?php echo $_GET["idFaille"]; ?>},
+
+								success : function(result)
+								{
+								}
+							});
+			    }, 1000 );
+			});
+
+			var delay = (function(){
+			  var timer = 0;
+			  return function(callback, ms){
+			    clearTimeout (timer);
+			    timer = setTimeout(callback, ms);
+			  };
+			})();
+		</script>
 </body>
 </html>

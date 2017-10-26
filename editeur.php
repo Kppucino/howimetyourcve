@@ -34,7 +34,7 @@
           {
             echo '<div class="col-md-12">';
           }
-
+          
           echo '<div class="row">';
           echo '<h1 class="col-md-2">'.$editeur[0]["nomEditeur"].'</h1>';
 
@@ -55,20 +55,50 @@
 					}
 
           if (isset($_SESSION['idUser']))
-          {
-            $commentaire = queryFetchWith2Value($queryGetCommentaireEditeurUser, ":idUser", $_SESSION['idUser'], ":idEditeur", $editeur[0]["idEditeur"]);
+					{
+						$commentaire = queryFetchWith2Value($queryGetCommentaireEditeurUser, ":idUser", $_SESSION['idUser'], ":idEditeur", $editeur[0]["idEditeur"]);
 
-            if(!empty($commentaire))
-            {
-              echo '<div class="descriptionCve">';
-              echo '<h3>Commentaire : </h3>';
-              echo '<p>'.$commentaire[0]["commentaire"].'</p>';
-              echo '</div>';
-            }
-          }
+						echo '<div class="descriptionCve row">';
+						echo '<h3>Commentaire : </h3>';
+
+						if(!empty($commentaire))
+						{
+		          echo '<textarea class="col-md-10 commentaire">'.$commentaire[0]["commentaire"].'</textarea>';
+						}
+						else
+						{
+							echo '<textarea class="col-md-10 commentaire"></textarea>';
+						}
+
+						 echo '</div>';
+					}
         }
       }
 			include("footer.php");
 		?>
+    <script>
+			$('.commentaire').keyup(function()
+			{
+			    delay(function(){
+						$.ajax({
+								url: "ajax.php",
+								type : 'POST',
+								data : {'commentaireUser':$('.commentaire').val(), 'idEditeurCommentaire': <?php echo $_GET["idEditeur"]; ?>},
+
+								success : function(result)
+								{
+								}
+							});
+			    }, 1000 );
+			});
+
+			var delay = (function(){
+			  var timer = 0;
+			  return function(callback, ms){
+			    clearTimeout (timer);
+			    timer = setTimeout(callback, ms);
+			  };
+			})();
+		</script>
 </body>
 </html>

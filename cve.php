@@ -165,22 +165,28 @@
 
           echo '</div>';
 
-          echo '<div class="descriptionCve">';
+          echo '<div class="descriptionCve row">';
           echo '<h3>Description : </h3>';
-          echo '<p>'.$cve[0]["descriptionCve"].'</p>';
+          echo '<p class="col-md-10">'.$cve[0]["descriptionCve"].'</p>';
           echo '</div>';
 
           if (isset($_SESSION['idUser']))
 					{
 						$commentaire = queryFetchWith2Value($queryGetCommentaireCveUser, ":idUser", $_SESSION['idUser'], ":idCve", $cve[0]["idCve"]);
 
+						echo '<div class="descriptionCve row">';
+						echo '<h3>Commentaire : </h3>';
+
 						if(!empty($commentaire))
 						{
-							echo '<div class="descriptionCve">';
-		          echo '<h3>Commentaire : </h3>';
-		          echo '<p>'.$commentaire[0]["commentaire"].'</p>';
-		          echo '</div>';
+		          echo '<textarea class="col-md-10 commentaire">'.$commentaire[0]["commentaire"].'</textarea>';
 						}
+						else
+						{
+							echo '<textarea class="col-md-10 commentaire"></textarea>';
+						}
+
+						 echo '</div>';
 					}
 
           if (!empty($reference))
@@ -200,5 +206,29 @@
 
 		include("footer.php");
 		?>
+		<script>
+			$('.commentaire').keyup(function()
+			{
+			    delay(function(){
+						$.ajax({
+								url: "ajax.php",
+								type : 'POST',
+								data : {'commentaireUser':$('.commentaire').val(), 'idCveCommentaire': <?php echo $_GET["idCVE"]; ?>},
+
+								success : function(result)
+								{
+								}
+							});
+			    }, 1000 );
+			});
+
+			var delay = (function(){
+			  var timer = 0;
+			  return function(callback, ms){
+			    clearTimeout (timer);
+			    timer = setTimeout(callback, ms);
+			  };
+			})();
+		</script>
 </body>
 </html>

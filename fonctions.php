@@ -509,8 +509,7 @@
 
 			if (!empty($search))
 			{
-					$page = $page * 10;
-					$listCVE = queryFetchWith2Value($queryGetCveEditorByNameCve, ":nomCve", '%'.$search.'%', ":offset", $page);
+					$listCVE = queryFetchWith1Value($queryGetCveEditorByNameCve, ":nomCve", '%'.$search.'%');
 			}
 			else
 			{
@@ -604,26 +603,24 @@
 			}
 	}
 
-	function getListEditeur($page, $search)
+	function getListEditeur($search)
 	{
 			include("SQLQuery.php");
 
 			if (!empty($search))
 			{
-					$page = $page * 10;
-					$listEditeur = queryFetchWith2Value($queryGetEditeurByName, ":nomEditeur", '%'.$search.'%', ":offset", $page);
+					$listEditeur = queryFetchWith1Value($queryGetEditeurByName, ":nomEditeur", '%'.$search.'%');
 					createListEditeur($listEditeur);
 			}
 	}
 
-	function getListFaille($page, $search)
+	function getListFaille($search)
 	{
 			include("SQLQuery.php");
 
 			if (!empty($search))
 			{
-					$page = $page * 10;
-					$listFaille = queryFetchWith2Value($queryGetFailleByName, ":nomFaille", '%'.$search.'%', ":offset", $page);
+					$listFaille = queryFetchWith1Value($queryGetFailleByName, ":nomFaille", '%'.$search.'%');
 					createListFaille($listFaille);
 			}
 	}
@@ -1242,7 +1239,7 @@
 		}
 	}
 
-	function searchFor($search, $type, $page)
+	function searchFor($search, $type)
 	{
 		include("SQLQuery.php");
 
@@ -1257,70 +1254,15 @@
 
 		if ($type == "cve")
 		{
-				$nbPage = ceil(getNbCVE("", "", "", $search)[0]["Nb"]/10);
+				getListCVE("", "", "", "", $idUser, $search);
 		}
 		else if ($type == "editeur")
 		{
-			if (!empty(queryFetchWith1Value($queryGetNbEditeurByName, ":nomEditeur", '%'.$search.'%', $search)))
-			{
-				$nbPage = ceil(queryFetchWith1Value($queryGetNbEditeurByName, ":nomEditeur", '%'.$search.'%', $search)[0]["Nb"]/10);
-			}
-			else
-			{
-				$nbPage = 0;
-			}
-
+			getListEditeur($search);
 		}
 		else if ($type == "faille")
 		{
-			if (!empty(queryFetchWith1Value($queryGetNbFailleByName, ":nomFaille", '%'.$search.'%', $search)))
-			{
-				$nbPage = ceil(queryFetchWith1Value($queryGetNbFailleByName, ":nomFaille", '%'.$search.'%', $search)[0]["Nb"]/10);
-			}
-			else
-			{
-				$nbPage = 0;
-			}
-		}
-
-		if (isset($_POST["previous"]))
-		{
-			if ($_POST["previous"] - 1 >= 0)
-			{
-				$page = $_POST["previous"] - 1;
-			}
-			else
-			{
-				$page = $_POST["previous"];
-			}
-		}
-		else if (isset($_POST["next"]))
-		{
-			if ($_POST["next"] + 1 < $nbPage)
-			{
-				$page = $_POST["next"] + 1;
-			}
-			else
-			{
-				$page = $_POST["next"];
-			}
-		}
-		else
-		{
-			$page = 0;
-		}
-
-		if ($type == "cve")
-		{
-				getListCVE("", "", "", $page, $idUser, $search);
-		}
-		else if ($type == "editeur")
-		{
-			getListEditeur($page, $search);
-		}
-		else if ($type == "faille")
-		{
-			getListFaille($page, $search);
+			getListFaille($search);
 		}
 	}
 ?>

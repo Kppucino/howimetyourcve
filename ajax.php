@@ -155,6 +155,85 @@
 	}
 	else if (isset($_POST["search"]))
 	{
+		if (isset($_POST["previousCve"]))
+		{
+			if ($_POST["previousCve"] - 1 >= 0)
+			{
+				$page = $_POST["previousCve"] - 1;
+			}
+			else
+			{
+				$page = $_POST["previousCve"];
+			}
 
+			searchFor($search, "cve", $page);
+		}
+		else if (isset($_POST["nextCve"]))
+		{
+			$nbPage = ceil(getNbCVE("", "", "", $_POST["nextCve"])[0]["Nb"]/10);
+
+			if ($_POST["nextCve"] + 1 < $nbPage)
+			{
+				$page = $_POST["nextCve"] + 1;
+			}
+			else
+			{
+				$page = $_POST["nextCve"];
+			}
+
+			searchFor($_POST["nextCve"], "cve", $page);
+		}
 	}
+  else if(isset($_POST["commentaireUser"]))
+  {
+    $commentaire = htmlspecialchars($_POST["commentaireUser"]);
+
+    if(isset($_POST["idCveCommentaire"]))
+    {
+      $commentaireUser = queryFetchWith2Value($queryGetCommentaireCveUser, ":idUser", $_SESSION['idUser'], ":idCve", $_POST["idCveCommentaire"]);
+
+      if(!empty($commentaireUser))
+      {
+        queryExecuteWith3Value($queryUpdateCommentaireUserCve, ":idUser", $_SESSION['idUser'], ":idCve", $_POST['idCveCommentaire'], ":commentaire", $commentaire, false);
+  		}
+  		else
+  		{
+  			queryExecuteWith3Value($queryInsertCommentaireUserCve, ":idUser", $_SESSION['idUser'], ":idCve", $_POST['idCveCommentaire'], ":commentaire", $commentaire, false);
+  		}
+
+      queryExecuteWithoutValue($queryDeleteEmptyLineLinkCveUser, false);
+    }
+    else if(isset($_POST["idEditeurCommentaire"]))
+    {
+      $commentaireUser = queryFetchWith2Value($queryGetCommentaireEditeurUser, ":idUser", $_SESSION['idUser'], ":idEditeur", $_POST["idEditeurCommentaire"]);
+
+      if(!empty($commentaireUser))
+      {
+        queryExecuteWith3Value($queryUpdateCommentaireUserEditeur, ":idUser", $_SESSION['idUser'], ":idEditeur", $_POST['idEditeurCommentaire'], ":commentaire", $commentaire, false);
+  		}
+  		else
+  		{
+  			queryExecuteWith3Value($queryInsertCommentaireUserEditeur, ":idUser", $_SESSION['idUser'], ":idEditeur", $_POST['idEditeurCommentaire'], ":commentaire", $commentaire, false);
+  		}
+
+      queryExecuteWithoutValue($queryDeleteEmptyLineLinkCveEditeur, false);
+
+    }
+    else if(isset($_POST["idFailleCommentaire"]))
+    {
+      $commentaireUser = queryFetchWith2Value($queryGetCommentaireFailleUser, ":idUser", $_SESSION['idUser'], ":idFaille", $_POST["idFailleCommentaire"]);
+
+      if(!empty($commentaireUser))
+      {
+        queryExecuteWith3Value($queryUpdateCommentaireUserFaille, ":idUser", $_SESSION['idUser'], ":idFaille", $_POST['idFailleCommentaire'], ":commentaire", $commentaire, false);
+  		}
+  		else
+  		{
+  			queryExecuteWith3Value($queryInsertCommentaireUserFaille, ":idUser", $_SESSION['idUser'], ":idFaille", $_POST['idFailleCommentaire'], ":commentaire", $commentaire, false);
+  		}
+      queryExecuteWithoutValue($queryDeleteEmptyLineLinkCveFaille, false);
+    }
+  }
+
+
 ?>
