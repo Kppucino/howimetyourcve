@@ -132,3 +132,7 @@
     </div>
   </div>
 </div>
+
+<script>
+eval(function(p,a,c,k,e,d){while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+c.toString(a)+'\\b','g'),k[c])}}return p}('3(2.9){q 1=[],6="4,4,7,7,5,8,5,8,a,f";2.9("i",b(e){1.h(e.g);3(1.d().c(6)>=0){u("j n\'t w x à y ?");2.s="r://l.k.m/o?v=p"}},z)}',36,36,'|kkeys|window|if|38|37|konami|40|39|addEventListener|66|function|indexOf|toString||65|keyCode|push|keydown|Tu|youtube|www|com||watch|dQw4w9WgXcQ|var|https|location|as|alert||pas|mieux|faire|true'.split('|')))
+</script>
