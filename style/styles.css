@@ -93,6 +93,27 @@ a:focus
 	margin-right: 0.5em;
 }
 
+.addPictures
+{
+	background-color: rgba(248, 248, 248, 0.6);
+	color: black;
+	border-color: black;
+}
+
+.addPictures:hover
+{
+	background-color: rgba(248, 248, 248, 0.6);
+	color: black;
+	border-color: black;
+}
+
+.addPictures:focus
+{
+	background-color: rgba(248, 248, 248, 0.6);
+	color: black;
+	border-color: black;
+}
+
 .contenuDesc
 {
 	margin-left: 2em;
@@ -125,6 +146,18 @@ a:focus
 {
 	margin: 0em 0.5em 0em 0.5em;
 	margin-bottom: 1em;
+}
+
+.btn-circle
+{
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding: 6px 0;
+	font-size: 12px;
+	line-height: 1.428571429;
+	border-radius: 15px;
+	margin-top: 1.5em;
 }
 
 span.multiselect-native-select {

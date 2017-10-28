@@ -46,6 +46,12 @@
 
           echo '</div>';
 
+
+					if (isset($_SESSION['niveauUser']) && $_SESSION['niveauUser'] == "administrateur")
+					{
+						echo '<button type="button" class="btn btn-default btn-circle col-md-offset-11 col-md-1" data-toggle="modal" data-target="#modalModif"><i class="glyphicon glyphicon-repeat"></i></button>';
+					}
+
           if (isset($editeur[0]["descriptionEditeur"]))
 					{
 						echo '<div class="descriptionCve row">';
@@ -71,6 +77,47 @@
 						}
 
 						 echo '</div>';
+					}
+
+					if (isset($_SESSION['niveauUser']) && $_SESSION['niveauUser'] == "administrateur")
+					{
+						echo '<div class="modal fade" id="modalModif" role="dialog">';
+		        echo '<div class="modal-dialog modal-lg">';
+		        echo '<div class="modal-content">';
+						echo '<div class="modal-header">';
+						echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+						echo '<h1 class="modal-title">Modification</h1>';
+						echo '</div>';
+						echo '<div class="modal-body col-md-offset-1 row">';
+						echo '<form class="form-horizontal" method="post" enctype="multipart/form-data" action="modif.php?idEditeur='.$editeur[0]["idEditeur"].'">';
+						echo '<div class="row">';
+						echo '<h3>Nom :</h3><input name="nomEditeur" value="'.$editeur[0]["nomEditeur"].'" required></input>';
+						echo '</div>';
+						echo '<div class="row">';
+						echo '<h3>Description : </h3>';
+
+						if (isset($editeur[0]["descriptionEditeur"]))
+						{
+							echo '<textarea class="col-md-10" name="descriptionEditeur">'.$editeur[0]["descriptionEditeur"].'</textarea>';
+						}
+						else
+						{
+							echo '<textarea class="col-md-10" name="descriptionEditeur">'.$editeur[0]["descriptionEditeur"].'</textarea>';
+						}
+						echo '</div>';
+						echo '<div class="row">';
+						echo '<h3>Photo : </h3>';
+            echo '<input type="file" id="files" accept="image/*" name="logoEditeur" class="btn btn-primary addPictures">';
+						echo '</div>';
+						echo '</div>';
+						echo '<div class="modal-footer">';
+						echo '<button type="submit" class="btn btn-default">Valider</button>';
+		        echo '<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>';
+						echo '</div>';
+						echo '</form>';
+						echo '</div>';
+						echo '</div>';
+		        echo '</div>';
 					}
         }
       }

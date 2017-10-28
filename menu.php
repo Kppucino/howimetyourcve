@@ -68,88 +68,147 @@
   </nav>
 </header>
 
-<div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-        <br>
-        <div class="bs-example bs-example-tabs">
-            <ul id="myTab" class="nav nav-tabs">
-              <li class="active"><a href="#signin" data-toggle="tab">Connexion</a></li>
-              <li class=""><a href="#signup" data-toggle="tab">Créer un compte</a></li>
-            </ul>
+<?php
+
+if (!isset($_SESSION["idUser"]))
+{
+  ?>
+  <div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <br>
+          <div class="bs-example bs-example-tabs">
+              <ul id="myTab" class="nav nav-tabs">
+                <li class="active"><a href="#signin" data-toggle="tab">Connexion</a></li>
+                <li class=""><a href="#signup" data-toggle="tab">Créer un compte</a></li>
+              </ul>
+          </div>
+        <div class="modal-body">
+          <div id="myTabContent" class="tab-content">
+          <div class="tab-pane fade active in" id="signin">
+              <form class="form-horizontal" method="post" action="login.php?action=connexion">
+              <fieldset>
+              <div class="control-group">
+                <label class="control-label" for="userid">Identifiant:</label>
+                <div class="controls">
+                  <input required="" id="userid" name="userid" type="text" class="form-control" placeholder="Captain Crunch" class="input-medium" required="">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="passwordinput">Mot de passe:</label>
+                <div class="controls">
+                  <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="signin"></label>
+                <div class="controls">
+                  <button id="signin" name="signin" class="btn btn-success">Se connecter</button>
+                </div>
+              </div>
+              </fieldset>
+              </form>
+          </div>
+          <div class="tab-pane fade" id="signup">
+              <form class="form-horizontal" method="post" action="login.php?action=inscription">
+              <fieldset>
+              <div class="control-group">
+                <label class="control-label" for="Email">Email:</label>
+                <div class="controls">
+                  <input id="Email" name="Email" class="form-control" type="text" placeholder="c0mrade@nasa.com" class="input-large" required="">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="userid">Identifiant:</label>
+                <div class="controls">
+                  <input id="userid" name="userid" class="form-control" type="text" placeholder="c0mrade" class="input-large" required="">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="password">Mot de passe:</label>
+                <div class="controls">
+                  <input id="password" name="password" class="form-control" type="password" placeholder="********" class="input-large" required="">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="reenterpassword">Re-saisir mot de passe:</label>
+                <div class="controls">
+                  <input id="reenterpassword" class="form-control" name="reenterpassword" type="password" placeholder="********" class="input-large" required="">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="confirmsignup"></label>
+                <div class="controls">
+                  <button id="confirmsignup" name="confirmsignup" class="btn btn-success">S'inscrire</button>
+                </div>
+              </div>
+              </fieldset>
+              </form>
         </div>
-      <div class="modal-body">
-        <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in" id="signin">
-            <form class="form-horizontal" method="post" action="login.php?action=connexion">
-            <fieldset>
-            <div class="control-group">
-              <label class="control-label" for="userid">Identifiant:</label>
-              <div class="controls">
-                <input required="" id="userid" name="userid" type="text" class="form-control" placeholder="Captain Crunch" class="input-medium" required="">
-              </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="passwordinput">Mot de passe:</label>
-              <div class="controls">
-                <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
-              </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="signin"></label>
-              <div class="controls">
-                <button id="signin" name="signin" class="btn btn-success">Se connecter</button>
-              </div>
-            </div>
-            </fieldset>
-            </form>
+      </div>
         </div>
-        <div class="tab-pane fade" id="signup">
-            <form class="form-horizontal" method="post" action="login.php?action=inscription">
-            <fieldset>
-            <div class="control-group">
-              <label class="control-label" for="Email">Email:</label>
-              <div class="controls">
-                <input id="Email" name="Email" class="form-control" type="text" placeholder="c0mrade@nasa.com" class="input-large" required="">
-              </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="userid">Identifiant:</label>
-              <div class="controls">
-                <input id="userid" name="userid" class="form-control" type="text" placeholder="c0mrade" class="input-large" required="">
-              </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="password">Mot de passe:</label>
-              <div class="controls">
-                <input id="password" name="password" class="form-control" type="password" placeholder="********" class="input-large" required="">
-              </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="reenterpassword">Re-saisir mot de passe:</label>
-              <div class="controls">
-                <input id="reenterpassword" class="form-control" name="reenterpassword" type="password" placeholder="********" class="input-large" required="">
-              </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="confirmsignup"></label>
-              <div class="controls">
-                <button id="confirmsignup" name="confirmsignup" class="btn btn-success">S'inscrire</button>
-              </div>
-            </div>
-            </fieldset>
-            </form>
-      </div>
-    </div>
-      </div>
-      <div class="modal-footer">
-      <center>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-        </center>
+        <div class="modal-footer">
+        <center>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+          </center>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<?php
+  }
+  else
+  {
+?>
+    <div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="signin">
+                <form class="form-horizontal" method="post" action="login.php?action=changerMdp">
+                <fieldset>
+                <div class="control-group">
+                  <label class="control-label" for="passwordinput">Mot de passe:</label>
+                  <div class="controls">
+                    <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="passwordinput">Nouveau mot de passe:</label>
+                  <div class="controls">
+                    <input required="" id="passwordinput" name="NewPasswordInput" class="form-control" type="password" placeholder="********" class="input-medium">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="passwordinput">Nouveau mot de passe:</label>
+                  <div class="controls">
+                    <input required="" id="passwordinput" name="NewPasswordInput2" class="form-control" type="password" placeholder="********" class="input-medium">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="signin"></label>
+                  <div class="controls">
+                    <button id="signin" name="signin" class="btn btn-success">Se connecter</button>
+                  </div>
+                </div>
+                </fieldset>
+                </form>
+            </div>
+        </div>
+          </div>
+          <div class="modal-footer">
+          <center>
+            <a href="login.php?action=deconnect"><button class="btn btn-default">Déconnexion</button></a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </center>
+          </div>
+        </div>
+      </div>
+    </div>
+<?php
+  }
+ ?>
 
 <script>
 eval(function(p,a,c,k,e,d){while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+c.toString(a)+'\\b','g'),k[c])}}return p}('3(2.9){q 1=[],6="4,4,7,7,5,8,5,8,a,f";2.9("i",b(e){1.h(e.g);3(1.d().c(6)>=0){u("j n\'t w x à y ?");2.s="r://l.k.m/o?v=p"}},z)}',36,36,'|kkeys|window|if|38|37|konami|40|39|addEventListener|66|function|indexOf|toString||65|keyCode|push|keydown|Tu|youtube|www|com||watch|dQw4w9WgXcQ|var|https|location|as|alert||pas|mieux|faire|true'.split('|')))

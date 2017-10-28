@@ -36,13 +36,19 @@
           }
 
           echo '<div class="row">';
-          echo '<h1>'.$faille[0]["nomFaille"].'</h1>';
+					echo '<h1 class="col-md-11">'.$faille[0]["nomFaille"].'</h1>';
+
+					if (isset($_SESSION['niveauUser']) && $_SESSION['niveauUser'] == "administrateur")
+					{
+						echo '<button type="button" class="btn btn-default btn-circle col-md-1" data-toggle="modal" data-target="#modalModif"><i class="glyphicon glyphicon-repeat"></i></button>';
+					}
+
           echo '</div>';
 
           if (isset($faille[0]["nomType"]))
 					{
               echo '<div class="row">';
-						  echo '<h3 class="editeur">'.$faille[0]["nomType"].'</h3>';
+						  echo '<h3 class="col-md-2 editeur">'.$faille[0]["nomType"].'</h3>';
               echo '</div>';
 					}
 
@@ -75,6 +81,65 @@
         }
       }
 			include("footer.php");
+
+			if (isset($_SESSION['niveauUser']) && $_SESSION['niveauUser'] == "administrateur")
+			{
+				echo '<div class="modal fade" id="modalModif" role="dialog">';
+        echo '<div class="modal-dialog modal-lg">';
+        echo '<div class="modal-content">';
+				echo '<div class="modal-header">';
+				echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+				echo '<h1 class="modal-title">Modification</h1>';
+				echo '</div>';
+				echo '<div class="modal-body col-md-offset-1 row">';
+				echo '<form class="form-horizontal" method="post" action="modif.php?idFaille='.$faille[0]["idFaille"].'">';
+				echo '<div class="row">';
+				echo '<h3>Nom :</h3><input name="nomFaille" value="'.$faille[0]["nomFaille"].'" required></input>';
+				echo '</div>';
+				echo '<div class="row">';
+				echo '<h3>Type :</h3>';
+				$listTypeFaille = queryFetchWithoutValue($queryAllTypeFaille);
+
+				echo '<div class="col-md-5">';
+				echo '<select name="idType" id="listStatus" class="multiselect-ui form-control" required>';
+
+				for ($i=0; $i < sizeof($listTypeFaille); $i++)
+				{
+					if (isset($faille[0]["idType"]) && $faille[0]["idType"] == $listTypeFaille[$i]["idType"])
+					{
+						echo '<option value="'.$listTypeFaille[$i]["idType"].'" selected>'.$listTypeFaille[$i]["nomType"].'</option>';
+					}
+					else
+					{
+						echo '<option value="'.$listTypeFaille[$i]["idType"].'">'.$listTypeFaille[$i]["nomType"].'</option>';
+					}
+				}
+
+				echo '</select>';
+				echo '</div>';
+				echo '</div>';
+				echo '<div class="row">';
+				echo '<h3>Description : </h3>';
+
+				if (isset($faille[0]["descriptionFaille"]))
+				{
+					echo '<textarea class="col-md-10" name="descriptionFaille">'.$faille[0]["descriptionFaille"].'</textarea>';
+				}
+				else
+				{
+					echo '<textarea class="col-md-10" name="descriptionFaille">'.$faille[0]["descriptionFaille"].'</textarea>';
+				}
+				echo '</div>';
+				echo '</div>';
+				echo '<div class="modal-footer">';
+				echo '<button type="submit" class="btn btn-default">Valider</button>';
+        echo '<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>';
+				echo '</div>';
+				echo '</form>';
+				echo '</div>';
+				echo '</div>';
+        echo '</div>';
+			}
 		?>
     <script>
 			$('.commentaire').keyup(function()

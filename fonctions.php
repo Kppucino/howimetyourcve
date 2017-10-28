@@ -1265,4 +1265,58 @@
 			getListFaille($search);
 		}
 	}
+
+	function envoyerMail($adresseDestinataire, $sujet, $message, $adresseEmetteur)
+	{
+		if ( preg_match ( "#^.+@gmail\.com$#" , $adresseDestinataire) == true) {
+			$adresseDestinataire = str_replace(".", "", $adresseDestinataire);
+			$adresseDestinataire = str_replace("@gmailcom", "@gmail.com", $adresseDestinataire);
+		}
+		try {
+			$ok = mail($adresseDestinataire , $sujet , $message, "From: " . $adresseEmetteur);
+			return $ok;
+		}
+		catch (Exception $ex) {
+			return false;
+		}
+	}
+
+	function envoyerMdp($nomUser, $mail)
+	{
+		include("SQLQuery.php");
+
+		$user = queryFetchWith2Value($queryGetUserWithNameAndMail, ":nomUser", $nomUser, ":mail", $mail);
+
+		$ok = false;
+
+		if (!empty($user))
+		{
+			$mdp = createMdp();
+
+			queryExecuteWith3Value($queryUpdateMdpUser, ":nomUser", $nomUser, ":mail", $mail, ":passwordUser", hash('sha256', $mdp), true);
+
+			$sujet = "Nouveau mot de passe";
+			$message = "Nouvelles données vous concernant :" . "<br>";
+			$message .= "Votre nom : ".$user[0]["nomUser"]."<br>";
+			$message .= "Votre nouveau mot de passe : ".$mdp;
+			$adresseEmetteur = "howimetyourcve@gmail.com";
+			$ok = envoyerMail($user[0]["mailUser"], $sujet, $message,"From : ".$adresseEmetteur);
+		}
+		return $ok;
+	}
+
+	function createMdp()
+	{
+			$nb_car = 7;
+			$chaine = 'azertyuiopqsdfghjklmwxcvbn123456789';
+	    $nb_lettres = strlen($chaine) - 1;
+	    $generation = '';
+	    for($i=0; $i < $nb_car; $i++)
+	    {
+	        $pos = mt_rand(0, $nb_lettres);
+	        $car = $chaine[$pos];
+	        $generation .= $car;
+	    }
+	    return $generation;
+	}
 ?>

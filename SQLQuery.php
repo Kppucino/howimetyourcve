@@ -54,6 +54,9 @@
   $queryInsertCommentaireUserEditeur = "INSERT INTO link_editeur_user(idUser, idEditeur, commentaire) VALUES (:idUser, :idEditeur, :commentaire)";
   $queryDeleteEmptyLineLinkEditeurUser = "DELETE FROM link_editeur_user WHERE (favoris IS NULL OR favoris = 0) AND (commentaire IS NULL OR commentaire = '')";
 
+  $queryUpdateEditeurWithPhoto = "UPDATE editeur SET nomEditeur = :nomEditeur, descriptionEditeur = :descriptionEditeur, logoEditeur = :logoEditeur WHERE idEditeur = :idEditeur";
+  $queryUpdateEditeurWithoutPhoto = "UPDATE editeur SET nomEditeur = :nomEditeur, descriptionEditeur = :descriptionEditeur WHERE idEditeur = :idEditeur";
+
   $queryGetFaille = "SELECT * FROM faille";
   $queryGetRandFaille = "SELECT * FROM faille ORDER BY rand() LIMIT 7";
   $queryGetFailleAndTypeById = "SELECT * FROM faille, typefaille WHERE faille.idType = typeFaille.idType AND faille.idFaille = :idFaille";
@@ -64,6 +67,10 @@
   $queryInsertCommentaireUserFaille = "INSERT INTO link_faille_user(idUser, idFaille, commentaire) VALUES (:idUser, :idFaille, :commentaire)";
   $queryDeleteEmptyLineLinkFailleUser = "DELETE FROM link_faille_user WHERE (favoris IS NULL OR favoris = 0) AND (commentaire IS NULL OR commentaire = '')";
 
+  $queryUpdateFaille = "UPDATE faille SET nomFaille = :nomFaille, descriptionFaille = :descriptionFaille, idType = :idType WHERE idFaille = :idFaille";
+
+  $queryAllTypeFaille = "SELECT * FROM typefaille ORDER BY nomType";
+
   $queryGetCVEByIdCve = "SELECT * FROM cve, editeur WHERE cve.idCve = :idCve AND cve.idEditeur = editeur.idEditeur";
   $queryGetReferenceCVEByIdCVE = "SELECT * FROM cve, link_cve_reference, reference WHERE cve.idCve = :idCve AND cve.idCve = link_cve_reference.idCve AND link_cve_reference.idReference = reference.idReference";
   $queryGetFailleCVEByIdCVE = "SELECT * FROM cve, link_cve_faille, faille WHERE cve.idCve = :idCve AND cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille = faille.idFaille";
@@ -73,6 +80,11 @@
 
   $queryGetUserByName= "SELECT * FROM user WHERE nomUser = :nomUser";
   $queryGetUserByIdUser= "SELECT * FROM user WHERE idUser = :idUser";
+  $queryGetUserWithNameAndMail = "SELECT * FROM user WHERE nomUser = :nomUser AND mailUser = :mail";
 
   $queryInsertUser = "INSERT INTO user(nomUser, mailUser, passwordUser) VALUES (:nomUser, :mailUser, :passwordUser)";
+  $queryUpdateMdpUserById = "UPDATE user SET passwordUser = :passwordUser WHERE idUser = :idUser";
+  $queryUpdateMdpUser = "UPDATE user SET passwordUser = :passwordUser WHERE nomUser = :nomUser AND mailUser = :mail";
+
+  $queryGetNiveauById = "SELECT * FROM niveau WHERE idNiveau = :idNiveau";
 ?>
