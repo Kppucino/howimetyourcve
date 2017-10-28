@@ -151,13 +151,13 @@ if (!isset($_SESSION["idUser"]))
             <div class="control-group">
               <label class="control-label" for="Email">Email:</label>
               <div class="controls">
-                <input id="Email" name="Email" class="form-control" type="text" placeholder="c0mrade@nasa.com" class="input-large" required="">
+                <input id="Email" name="Email" class="form-control" type="text" placeholder="darkDante@pacificBell.com" class="input-large" required="">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="userid">Identifiant:</label>
               <div class="controls">
-                <input id="userid" name="userid" class="form-control" type="text" placeholder="c0mrade" class="input-large" required="">
+                <input id="userid" name="userid" class="form-control" type="text" placeholder="DarkDante" class="input-large" required="">
               </div>
             </div>
             <div class="control-group">

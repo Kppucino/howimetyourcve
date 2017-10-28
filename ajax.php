@@ -14,7 +14,7 @@
 
 		if (isset($_POST['editeur']) && isset($_POST['faille']) && isset($_POST['status']))
 		{
-				$nbPage = ceil(getNbCVE(json_decode($_POST['editeur']), json_decode($_POST['faille'], ""), $_POST['status'])[0]["Nb"]/25);
+				$nbPage = ceil(getNbCVE(json_decode($_POST['editeur']), json_decode($_POST['faille']), $_POST['status'], "")[0]["Nb"]/25);
 		}
 		else if (isset($_POST['editeur']) && isset($_POST['faille']) && !isset($_POST['status']))
 		{

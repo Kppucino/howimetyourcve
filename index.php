@@ -101,6 +101,12 @@
 												<option value="all">Toutes</option>
 												<option value="open">Ouvertes</option>
 												<option value="close">Fermées</option>
+												<?php
+													if(isset($_SESSION["idUser"]))
+													{
+														echo '<option value="favoris">Favoris</option>';
+													}
+												?>
 							        </select>
 							    </div>
 								</div>
