@@ -1194,6 +1194,15 @@
 		return $jour."/".$mois."/".$annee;
 	}
 
+	function formaterDateInsert($date)
+	{
+		$annee = substr($date, 0, 4);
+		$mois = substr($date, 5, 2);
+		$jour = substr($date, 8, 2);
+
+		return $annee.'-'.$mois.'-'.$jour;
+	}
+
 	function checkifUserExist($user, $mdp)
 	{
 		include("SQLQuery.php");
@@ -1381,5 +1390,49 @@
 	        $generation .= $car;
 	    }
 	    return $generation;
+	}
+
+	function searchForFaille($text, $idCve)
+	{
+		include("SQLQuery.php");
+
+		$listFaille = queryFetchWithoutValue($queryGetFaille);
+
+		for ($i=0; $i < sizeof($listFaille); $i++)
+		{
+		  if (strpos($listFaille[$i]["nomFaille"], "(") !==false)
+		  {
+				$found = false;
+
+		    $search = substr($listFaille[$i]["nomFaille"], 0, strpos($listFaille[$i]["nomFaille"], "(")-1);
+
+		    $pos = strpos($search, $text);
+
+		    if ($pos !== false)
+		    {
+		        queryExecuteWith2Value($queryInsertLinkCveFaille, ":idCve", $idCve, ":idFaille", $listFaille[$i]["idFaille"], false);
+		    }
+
+				if ($found == false)
+				{
+					$search = substr($listFaille[$i]["nomFaille"], strpos($listFaille[$i]["nomFaille"], "(")+1, (strpos($listFaille[$i]["nomFaille"], ")")-strpos($listFaille[$i]["nomFaille"], "("))-1);
+			    $pos = strpos($text, $search);
+
+			    if ($pos !== false)
+			    {
+			        queryExecuteWith2Value($queryInsertLinkCveFaille, ":idCve", $idCve, ":idFaille", $listFaille[$i]["idFaille"], false);
+			    }
+				}
+		  }
+		  else
+		  {
+		    $pos = strpos($text, $listFaille[$i]["nomFaille"]);
+
+		    if ($pos !== false)
+		    {
+		       queryExecuteWith2Value($queryInsertLinkCveFaille, ":idCve", $idCve, ":idFaille", $listFaille[$i]["idFaille"], false);
+		    }
+		  }
+		}
 	}
 ?>

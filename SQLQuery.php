@@ -112,4 +112,13 @@
   $queryUpdateProduit = "UPDATE produit SET nomProduit = :nomProduit, descriptionProduit = :descriptionProduit WHERE idProduit = :idProduit";
   $queryGetNbProduitByName = "SELECT COUNT(produit.idProduit) AS Nb FROM produit WHERE produit.nomProduit LIKE :nomProduit";
   $queryGetProduitByName = "SELECT * FROM produit, link_cve_produit, editeur, cve WHERE produit.nomProduit LIKE :nomProduit AND produit.idProduit = link_cve_produit.idProduit AND link_cve_produit.idCve = cve.idCve AND cve.idEditeur = editeur.idEditeur ORDER BY nomProduit";
+  $queryGetOnlyProduitByName = "SELECT * FROM produit WHERE produit.nomProduit LIKE :nomProduit";
+
+  $queryInsertEditeur = "INSERT INTO editeur(nomEditeur) VALUES (:nomEditeur)";
+  $queryInsertProduit = "INSERT INTO produit(nomProduit) VALUES (:nomProduit)";
+  $queryInsertReference = "INSERT INTO reference(urlReference) VALUES (:urlReference)";
+  $queryInsertCve = "INSERT INTO cve(nomCve, dateCve, descriptionCve, noteBaseCve, noteExploitabiliteCve, noteImpactCve, adminAccesCve, userAccesCve, userInteractionRequiredCve, confidentialiteImpactCve, integriteImpactCve, disponibiliteImpactCve, complexiteAttaqueCve, severiteCve, idEditeur) VALUES (:nomCve, :dateCve, :descriptionCve, :noteBaseCve, :noteExploitabiliteCve, :noteImpactCve, :adminAccesCve, :userAccesCve, :userInteractionRequiredCve, :confidentialiteImpactCve, :integriteImpactCve, :disponibiliteImpactCve, :complexiteAttaqueCve, :severiteCve, :idEditeur)";
+  $queryInsertLinkCveFaille = "INSERT INTO link_cve_faille(idCve, idFaille) VALUES (:idCve, :idFaille)";
+  $queryInsertLinkCveProduit = "INSERT INTO link_cve_produit(idCve, idProduit) VALUES (:idCve, :idProduit)";
+  $queryInsertLinkCveReference = "INSERT INTO link_cve_reference(idCve, idReference) VALUES (:idCve, :idReference)";
 ?>

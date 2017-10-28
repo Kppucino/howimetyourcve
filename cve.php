@@ -45,9 +45,9 @@
                     echo '<h4>'.number_format($cve[0]["noteExploitabiliteCve"], 2).'</h4>';
                 }
 
-                if (isset($cve[0]["accesComplexiteCve"]))
+                if (isset($cve[0]["complexiteAttaqueCve"]))
                 {
-                    echo '<h4>'.$cve[0]["accesComplexiteCve"].'</h4>';
+                    echo '<h4>'.$cve[0]["complexiteAttaqueCve"].'</h4>';
                 }
 
                 if (isset($cve[0]["adminAccesCve"]) || isset($cve[0]["userAccesCve"]))
@@ -85,14 +85,9 @@
 
                 }
 
-                if (isset($cve[0]["authentificationImpactCve"]) || isset($cve[0]["confidentialiteImpactCve"]) || isset($cve[0]["integriteImpactCve"]) || isset($cve[0]["disponibiliteImpactCve"]))
+                if (isset($cve[0]["confidentialiteImpactCve"]) || isset($cve[0]["integriteImpactCve"]) || isset($cve[0]["disponibiliteImpactCve"]))
                 {
                     echo '<h3>Impact sur</h3>';
-
-                    if (isset($cve[0]["authentificationImpactCve"]))
-                    {
-                        echo '<li>Authentification ('.$cve[0]["authentificationImpactCve"].')</li>';
-                    }
 
                     if (isset($cve[0]["confidentialiteImpactCve"]))
                     {

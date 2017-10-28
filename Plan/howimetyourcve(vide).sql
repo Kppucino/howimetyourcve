@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  127.0.0.1
--- Généré le :  Mer 25 Octobre 2017 à 20:50
+-- Généré le :  Sam 28 Octobre 2017 à 14:07
 -- Version du serveur :  5.7.14
 -- Version de PHP :  5.6.25
 
@@ -148,6 +148,17 @@ CREATE TABLE `link_faille_user` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `niveau`
+--
+
+CREATE TABLE `niveau` (
+  `idNiveau` int(11) NOT NULL,
+  `nomNiveau` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `produit`
 --
 
@@ -188,8 +199,9 @@ CREATE TABLE `typefaille` (
 CREATE TABLE `user` (
   `idUser` int(11) NOT NULL,
   `nomUser` varchar(30) NOT NULL,
-  `mailUser` varchar(25) DEFAULT NULL,
-  `passwordUser` varchar(64) NOT NULL
+  `mailUser` varchar(50) NOT NULL,
+  `passwordUser` varchar(64) NOT NULL,
+  `idNiveau` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -259,6 +271,12 @@ ALTER TABLE `link_faille_user`
   ADD KEY `fkUserFaille` (`idUser`);
 
 --
+-- Index pour la table `niveau`
+--
+ALTER TABLE `niveau`
+  ADD PRIMARY KEY (`idNiveau`);
+
+--
 -- Index pour la table `produit`
 --
 ALTER TABLE `produit`
@@ -280,7 +298,48 @@ ALTER TABLE `typefaille`
 -- Index pour la table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`idUser`);
+  ADD PRIMARY KEY (`idUser`),
+  ADD KEY `fkNiveauUser` (`idNiveau`);
+
+--
+-- AUTO_INCREMENT pour les tables exportées
+--
+
+--
+-- AUTO_INCREMENT pour la table `cve`
+--
+ALTER TABLE `cve`
+  MODIFY `idCve` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `editeur`
+--
+ALTER TABLE `editeur`
+  MODIFY `idEditeur` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `faille`
+--
+ALTER TABLE `faille`
+  MODIFY `idFaille` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `produit`
+--
+ALTER TABLE `produit`
+  MODIFY `idProduit` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `reference`
+--
+ALTER TABLE `reference`
+  MODIFY `idReference` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `typefaille`
+--
+ALTER TABLE `typefaille`
+  MODIFY `idType` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Contraintes pour les tables exportées
 --
@@ -338,6 +397,12 @@ ALTER TABLE `link_editeur_user`
 ALTER TABLE `link_faille_user`
   ADD CONSTRAINT `fkFailleUser` FOREIGN KEY (`idFaille`) REFERENCES `faille` (`idFaille`),
   ADD CONSTRAINT `fkUserFaille` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
+
+--
+-- Contraintes pour la table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `fkNiveauUser` FOREIGN KEY (`idNiveau`) REFERENCES `niveau` (`idNiveau`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
