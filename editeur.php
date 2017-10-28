@@ -28,19 +28,19 @@
 
           if (!empty($nbCVE) || !empty($topFailleCVE) || !empty($moyenneCVE))
           {
-              echo '<div class="col-md-10">';
+              echo '<div class="presentation col-md-offset-1 col-md-9">';
           }
           else
           {
-            echo '<div class="col-md-12">';
+            echo '<div class="presentation col-md-offset-1 col-md-11">';
           }
-          
+
           echo '<div class="row">';
-          echo '<h1 class="col-md-2">'.$editeur[0]["nomEditeur"].'</h1>';
+          echo '<h1 class="col-md-11">'.$editeur[0]["nomEditeur"].'</h1>';
 
           if (isset($editeur[0]["logoEditeur"]))
 					{
-							echo '<img class="col-md-offset-9 col-md-1 img-responsive" src="images/logoEditeur/'.$editeur[0]["logoEditeur"].'" class="media-photo"></img>';
+							echo '<img class="col-md-1 img-responsive" src="images/logoEditeur/'.$editeur[0]["logoEditeur"].'" class="media-photo"></img>';
 							echo '</a>';
 					}
 
@@ -48,10 +48,10 @@
 
           if (isset($editeur[0]["descriptionEditeur"]))
 					{
-            echo '<div class="descriptionCve">';
-            echo '<h3>Description : </h3>';
-            echo '<p>'.$editeur[0]["descriptionEditeur"].'</p>';
-            echo '</div>';
+						echo '<div class="descriptionCve row">';
+	          echo '<h3 class="titleDescription">Description : </h3>';
+	          echo '<p class="col-md-10 contenuDesc">'.$editeur[0]["descriptionEditeur"].'</p>';
+	          echo '</div>';
 					}
 
           if (isset($_SESSION['idUser']))
@@ -59,15 +59,15 @@
 						$commentaire = queryFetchWith2Value($queryGetCommentaireEditeurUser, ":idUser", $_SESSION['idUser'], ":idEditeur", $editeur[0]["idEditeur"]);
 
 						echo '<div class="descriptionCve row">';
-						echo '<h3>Commentaire : </h3>';
+						echo '<h3 class="titleDescription">Commentaire : </h3>';
 
 						if(!empty($commentaire))
 						{
-		          echo '<textarea class="col-md-10 commentaire">'.$commentaire[0]["commentaire"].'</textarea>';
+		          echo '<textarea class="col-md-10 commentaire contenuDesc">'.$commentaire[0]["commentaire"].'</textarea>';
 						}
 						else
 						{
-							echo '<textarea class="col-md-10 commentaire"></textarea>';
+							echo '<textarea class="col-md-10 commentaire contenuDesc"></textarea>';
 						}
 
 						 echo '</div>';

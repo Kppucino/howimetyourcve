@@ -24,7 +24,7 @@
 	                echo '<div class="row">';
 	            }
 
-							echo '<a href="editeur.php?idEditeur='.$editor[$i]["idEditeur"].'"><button type="button" class="btn btn-default btn-sm">'.$editor[$i]["nomEditeur"].'</button></a>';
+							echo '<a href="editeur.php?idEditeur='.$editor[$i]["idEditeur"].'><button type="button" class="btn btn-default btn-sm">'.$editor[$i]["nomEditeur"].'</button></a>';
 
 							$compteurCSS ++;
 
@@ -105,7 +105,7 @@
 							    </div>
 								</div>
 							</div>
-							<div class="col-md-1">
+							<div class="col-md-1 row">
 								<div class="buttonFiltre">
 									<button class="btn btn-default"><i class="glyphicon glyphicon-filter"></i></button>
 								</div>
@@ -114,7 +114,7 @@
 									<input type="hidden" value="0" name="page"></input>
 									<button class="btn btn-default previous"><i class="glyphicon glyphicon-chevron-left"></i></button>
 									<button class="btn btn-default next"><i class="glyphicon glyphicon-chevron-right"></i></button>
-								</div>
+							</div>
 						</div>
 						<div class="table-container">
 							<table class="table table-filter">

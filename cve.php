@@ -140,34 +140,33 @@
 
           if (printInfoCVE($cve) == true || !empty($faille))
           {
-              echo '<div class="col-md-10">';
+              echo '<div class="presentation col-md-offset-1 col-md-9">';
           }
           else
           {
-            echo '<div class="col-md-12">';
+            echo '<div class="presentation col-md-offset-1 col-md-11">';
           }
 
-          echo '<div class="row">';
-          echo '<h1 class="col-md-2">'.$cve[0]["nomCve"].'</h1>';
-          echo '<h4 class="col-md-offset-8 col-md-2">'.formaterDate($cve[0]["dateCve"]).'</h4>';
-          echo '</div>';
-          echo '<div class="row">';
-          echo '<h3 class="col-md-2"><a href="editeur.php?idEditeur='.$cve[0]["idEditeur"].'">'.$cve[0]["nomEditeur"].'</a></h3>';
+					echo '<div class="row">';
+					echo '<h1 class="col-md-9 titre">'.$cve[0]["nomCve"].'</h1>';
 
-          if ($cve[0]["statusCve"] == 1)
+					if ($cve[0]["statusCve"] == 1)
 					{
-							echo '<span class="col-md-offset-8 col-md-2">Ouvertes</span>';
+							echo '<h4 class="col-md-3 date">'.formaterDate($cve[0]["dateCve"]).' - Ouverte</h4>';
 					}
 					else
 					{
-							echo '<span class="col-md-offset-8 col-md-2">Fermées</span>';
+						echo '<h4 class="col-md-3 date">'.formaterDate($cve[0]["dateCve"]).' - Fermée</h4>';
 					}
 
           echo '</div>';
+          echo '<div class="row">';
+          echo '<h3 class="col-md-2 editeur"><a href="editeur.php?idEditeur='.$cve[0]["idEditeur"].'">'.$cve[0]["nomEditeur"].'</a></h3>';
+          echo '</div>';
 
           echo '<div class="descriptionCve row">';
-          echo '<h3>Description : </h3>';
-          echo '<p class="col-md-10">'.$cve[0]["descriptionCve"].'</p>';
+          echo '<h3 class="titleDescription">Description : </h3>';
+          echo '<p class="col-md-10 contenuDesc">'.$cve[0]["descriptionCve"].'</p>';
           echo '</div>';
 
           if (isset($_SESSION['idUser']))
@@ -175,15 +174,15 @@
 						$commentaire = queryFetchWith2Value($queryGetCommentaireCveUser, ":idUser", $_SESSION['idUser'], ":idCve", $cve[0]["idCve"]);
 
 						echo '<div class="descriptionCve row">';
-						echo '<h3>Commentaire : </h3>';
+						echo '<h3 class="titleDescription">Commentaire : </h3>';
 
 						if(!empty($commentaire))
 						{
-		          echo '<textarea class="col-md-10 commentaire">'.$commentaire[0]["commentaire"].'</textarea>';
+		          echo '<textarea class="col-md-10 commentaire contenuDesc">'.$commentaire[0]["commentaire"].'</textarea>';
 						}
 						else
 						{
-							echo '<textarea class="col-md-10 commentaire"></textarea>';
+							echo '<textarea class="col-md-10 commentaire contenuDesc"></textarea>';
 						}
 
 						 echo '</div>';
@@ -191,8 +190,8 @@
 
           if (!empty($reference))
           {
-            echo '<div class="descriptionCve">';
-            echo '<h4>Reference : </h4>';
+            echo '<div class="descriptionCve reference row">';
+            echo '<h3 class="titleDescription">Reference : </h3>';
 
             for ($i=0; $i < sizeof($reference); $i++)
             {

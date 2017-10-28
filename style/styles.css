@@ -1,19 +1,40 @@
 @import url('https://fonts.googleapis.com/css?family=Arapey');
+@font-face {
+	font-family: "DaxRegular";
+	src: url('DaxRegular.ttf');
+}
 body
 {
-	background-color: #ffff;
+	background-image: url("../images/fond/crissXcross/crissXcross.png");
+	background-color: ;
 	font-size: 17px;
 	margin-top: 1em auto 2em;
 	color : #000;
 }
 
 .navbar-default {
-    background-color: #F5E641;
-    border-color: #F5E652;
+    background-color: #ffffff;
+    border-color: #ffffff;
 }
 
-.navbar-default .navbar-brand {
-    color: #fff;
+.navbar-default .navbar-brand
+{
+    color: #494949;
+}
+
+.navbar-default .navbar-brand:hover
+{
+    color: #494949;
+}
+
+.navbar-default .navbar-nav > li > a
+{
+    color: #494949;
+}
+
+.navbar-default .navbar-nav > li > a:hover
+{
+    color: #494949;
 }
 
 .important {
@@ -22,10 +43,59 @@ display: inline-block;
 width: 350px;
 }
 
-.navbar-brand
+.navbar-brandName
 {
-	background-image: url('../images/logo/ms-icon-70x70.png');
-	width: 70px;
+	font-family: "DaxRegular";
+}
+
+a
+{
+	color: #494949;!important
+}
+
+a:hover
+{
+	color: #494949;!important
+}
+
+a:focus
+{
+	color: #494949;!important
+}
+
+.presentation
+{
+	background-color: #ffffff;
+	border-radius: 1em;
+	padding-left: 2em;
+	padding-bottom: 2em;
+}
+
+.date
+{
+	padding-right: 3em;
+	margin-top: 2em;
+}
+
+.editeur
+{
+		margin-top: 0em;
+}
+
+.reference li
+{
+	padding-left: 2em;
+}
+
+.titleDescription
+{
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+
+.contenuDesc
+{
+	margin-left: 2em;
 }
 
 .searchIcon
@@ -35,8 +105,26 @@ width: 350px;
 
 .statPanel
 {
-	background-color: rgba(241, 241, 241, 0.4);
+	background-color: #ffffff;
 	border-radius: 1em;
+	color : #494949;
+	margin-bottom: 2em;
+}
+
+.statPanel li
+{
+	padding-left: 1.5em;
+}
+
+.control-label
+{
+	color: #494949;
+}
+
+.btn-sm
+{
+	margin: 0em 0.5em 0em 0.5em;
+	margin-bottom: 1em;
 }
 
 span.multiselect-native-select {
@@ -111,7 +199,7 @@ span.multiselect-native-select select {
 	text-align: center;
 }
 .content .content-footer p {
-	color: #6d6d6d;
+	color: #494949;
     font-size: 12px;
     text-align: center;
 }
@@ -180,7 +268,7 @@ span.multiselect-native-select select {
 	color: #999;
 }
 .table-filter .media .title {
-	color: #2BBCDE;
+	color: #494949;
 	font-size: 14px;
 	font-weight: bold;
 	line-height: normal;

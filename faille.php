@@ -28,11 +28,11 @@
 
           if (!empty($nbCVE) || !empty($topEditeurCVE) || !empty($moyenneCVE))
           {
-              echo '<div class="col-md-10">';
+              echo '<div class="presentation col-md-offset-1 col-md-9">';
           }
           else
           {
-            echo '<div class="col-md-12">';
+            echo '<div class="presentation col-md-offset-1 col-md-11">';
           }
 
           echo '<div class="row">';
@@ -42,15 +42,15 @@
           if (isset($faille[0]["nomType"]))
 					{
               echo '<div class="row">';
-						  echo '<h3>'.$faille[0]["nomType"].'</h3>';
+						  echo '<h3 class="editeur">'.$faille[0]["nomType"].'</h3>';
               echo '</div>';
 					}
 
           if (isset($faille[0]["descriptionFaille"]))
 					{
-            echo '<div class="descriptionCve">';
-            echo '<h3>Description : </h3>';
-            echo '<p>'.$faille[0]["descriptionFaille"].'</p>';
+						echo '<div class="descriptionCve row">';
+	          echo '<h3 class="titleDescription">Description : </h3>';
+            echo '<p class="col-md-10 contenuDesc">'.$faille[0]["descriptionFaille"].'</p>';
             echo '</div>';
 					}
 
@@ -59,15 +59,15 @@
 						$commentaire = queryFetchWith2Value($queryGetCommentaireFailleUser, ":idUser", $_SESSION['idUser'], ":idFaille", $faille[0]["idFaille"]);
 
 						echo '<div class="descriptionCve row">';
-						echo '<h3>Commentaire : </h3>';
+						echo '<h3 class="titleDescription">Commentaire : </h3>';
 
 						if(!empty($commentaire))
 						{
-		          echo '<textarea class="col-md-10 commentaire">'.$commentaire[0]["commentaire"].'</textarea>';
+		          echo '<textarea class="col-md-10 commentaire contenuDesc">'.$commentaire[0]["commentaire"].'</textarea>';
 						}
 						else
 						{
-							echo '<textarea class="col-md-10 commentaire"></textarea>';
+							echo '<textarea class="col-md-10 commentaire contenuDesc"></textarea>';
 						}
 
 						 echo '</div>';
