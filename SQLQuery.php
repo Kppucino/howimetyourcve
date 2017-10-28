@@ -8,6 +8,7 @@
   $queryGetAllCVEWithSomeFailleAndStatus = "SELECT DISTINCT cve.idCve, cve.nomCve, cve.dateCve, cve.statusCve, cve.descriptionCve, cve.noteBaseCve, editeur.idEditeur, editeur.nomEditeur, editeur.descriptionEditeur, editeur.logoEditeur FROM cve, link_cve_faille, editeur WHERE cve.idEditeur = editeur.idEditeur AND cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille IN (:arrayIdFaille) AND cve.statusCve = :statusCve ORDER BY dateCve DESC LIMIT 25 OFFSET :offset";
   $queryGetAllCVEWithSomeEditorAndSomeFailleAndStatus = "SELECT DISTINCT cve.idCve, cve.nomCve, cve.dateCve, cve.statusCve, cve.descriptionCve, cve.noteBaseCve, editeur.idEditeur, editeur.nomEditeur, editeur.descriptionEditeur, editeur.logoEditeur FROM cve, link_cve_faille, editeur WHERE cve.idEditeur = editeur.idEditeur AND editeur.idEditeur IN (:arrayIdEditeur) AND cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille IN (:arrayIdFaille) AND cve.statusCve = :statusCve ORDER BY dateCve DESC LIMIT 25 OFFSET :offset";
   $queryGetCveEditorByNameCve = "SELECT * FROM cve, editeur WHERE cve.nomCve LIKE :nomCve AND cve.idEditeur = editeur.idEditeur ORDER BY dateCve DESC, statusCve";
+  $queryGetProduitByIdCVE = "SELECT * FROM link_cve_produit, produit WHERE link_cve_produit.idCve = :idCve AND link_cve_produit.idProduit = produit.idProduit ORDER BY nomProduit";
 
   $queryGetFavorisUser = "SELECT idCve FROM link_cve_user WHERE idUser = :idUser AND favoris = 1";
   $queryCheckIfExistInCveUser = "SELECT COUNT(*) FROM link_cve_user WHERE idUser = :idUser AND idCve = :idCve";
@@ -44,7 +45,7 @@
   $queryGetAVGAllCVEWithSomeFailleAndStatus = "SELECT AVG(DISTINCT(cve.noteBaseCve)) AS Moyenne FROM cve, link_cve_faille WHERE cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille IN (:arrayIdFaille) AND cve.statusCve = :statusCve ORDER BY dateCve DESC";
   $queryGetAVGAllCVEWithSomeEditorAndSomeFailleAndStatus = "SELECT AVG(DISTINCT(cve.noteBaseCve)) AS Moyenne FROM cve, link_cve_faille, editeur WHERE cve.idEditeur = editeur.idEditeur AND editeur.idEditeur IN (:arrayIdEditeur) AND cve.idCve = link_cve_faille.idCve AND link_cve_faille.idFaille IN (:arrayIdFaille) AND cve.statusCve = :statusCve ORDER BY dateCve DESC";
 
-  $queryGetEditeur = "SELECT * FROM editeur";
+  $queryGetEditeur = "SELECT * FROM editeur ORDER BY nomEditeur";
   $queryGetRandEditor = "SELECT * FROM editeur ORDER BY rand() LIMIT 7";
   $queryGetEditeurAndCVEByIdEditeur = "SELECT * FROM editeur WHERE editeur.idEditeur = :idEditeur";
   $queryGetCommentaireEditeurUser = "SELECT * FROM link_editeur_user WHERE idUser = :idUser AND idEditeur = :idEditeur";
@@ -87,4 +88,9 @@
   $queryUpdateMdpUser = "UPDATE user SET passwordUser = :passwordUser WHERE nomUser = :nomUser AND mailUser = :mail";
 
   $queryGetNiveauById = "SELECT * FROM niveau WHERE idNiveau = :idNiveau";
+
+  $queryGetProduitById = "SELECT * FROM produit, link_cve_produit, cve, editeur WHERE produit.idProduit = :idProduit AND produit.idProduit = link_cve_produit.idProduit AND link_cve_produit.idCve = cve.idCve AND cve.idEditeur = editeur.idEditeur";
+  $queryGetNbCveForProduit = "SELECT COUNT(idCve) AS Nb FROM link_cve_produit WHERE idProduit = :idProduit";
+  $queryGetAVGCveForProduit  = "SELECT AVG(DISTINCT(cve.noteBaseCve)) AS Moyenne FROM cve, link_cve_produit WHERE link_cve_produit.idProduit = :idProduit AND link_cve_produit.idCve = cve.idCVE";
+  $queryUpdateProduit = "UPDATE produit SET nomProduit = :nomProduit, descriptionProduit = :descriptionProduit WHERE idProduit = :idProduit";
 ?>

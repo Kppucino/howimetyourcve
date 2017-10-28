@@ -78,6 +78,13 @@
         }
       }
     }
+    elseif ($_GET['action'] == 'oublieMdp')
+    {
+      if ($_POST['Email'] != '' && $_POST['userid'] != '' )
+      {
+        envoyerMdp($_POST['userid'], $_POST['Email']);
+      }
+    }
     elseif ($_GET['action'] == 'deconnect')
     {
       session_destroy();

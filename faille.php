@@ -127,7 +127,7 @@
 				}
 				else
 				{
-					echo '<textarea class="col-md-10" name="descriptionFaille">'.$faille[0]["descriptionFaille"].'</textarea>';
+					echo '<textarea class="col-md-10" name="descriptionFaille"></textarea>';
 				}
 				echo '</div>';
 				echo '</div>';

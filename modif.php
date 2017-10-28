@@ -44,4 +44,19 @@
 
     redirect('editeur.php?idEditeur='.$_GET['idEditeur']);
   }
+  else if (isset($_GET['idProduit']))
+  {
+    if (isset($_POST["descriptionProduit"]))
+    {
+      $descriptionProduit = $_POST["descriptionProduit"];
+    }
+    else
+    {
+      $descriptionProduit = "";
+    }
+
+    queryExecuteWith3Value($queryUpdateProduit, ":nomProduit", $_POST["nomProduit"], ":descriptionProduit", $_POST["descriptionProduit"], ":idProduit", $_GET['idProduit'], false);
+
+    redirect('produit.php?idProduit='.$_GET['idProduit']);
+  }
 ?>

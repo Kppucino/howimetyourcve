@@ -145,10 +145,35 @@ if (!isset($_SESSION["idUser"]))
               </fieldset>
               </form>
         </div>
+        <div class="tab-pane fade" id="forgetMdp">
+            <form class="form-horizontal" method="post" action="login.php?action=oublieMdp">
+            <fieldset>
+            <div class="control-group">
+              <label class="control-label" for="Email">Email:</label>
+              <div class="controls">
+                <input id="Email" name="Email" class="form-control" type="text" placeholder="c0mrade@nasa.com" class="input-large" required="">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="userid">Identifiant:</label>
+              <div class="controls">
+                <input id="userid" name="userid" class="form-control" type="text" placeholder="c0mrade" class="input-large" required="">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="forgetMdp"></label>
+              <div class="controls">
+                <button id="forgetMdp" name="forgetMdp" class="btn btn-success">Envoyer mot de passe</button>
+              </div>
+            </div>
+            </fieldset>
+            </form>
+      </div>
       </div>
         </div>
         <div class="modal-footer">
         <center>
+          <a href="#forgetMdp" data-toggle="tab"><button id="forgetMdp" name="forgetMdp" class="btn btn-default">Mot de passe oublié ?</button></a>
           <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
           </center>
         </div>

@@ -102,7 +102,7 @@
 						}
 						else
 						{
-							echo '<textarea class="col-md-10" name="descriptionEditeur">'.$editeur[0]["descriptionEditeur"].'</textarea>';
+							echo '<textarea class="col-md-10" name="descriptionEditeur"></textarea>';
 						}
 						echo '</div>';
 						echo '<div class="row">';

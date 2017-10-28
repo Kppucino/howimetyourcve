@@ -13,6 +13,7 @@
           $cve = queryFetchWith1Value($queryGetCVEByIdCve, ":idCve", $_GET["idCVE"]);
           $reference = queryFetchWith1Value($queryGetReferenceCVEByIdCVE, ":idCve", $_GET["idCVE"]);
           $faille = queryFetchWith1Value($queryGetFailleCVEByIdCVE, ":idCve", $_GET["idCVE"]);
+					$listProduits = queryFetchWith1Value($queryGetProduitByIdCVE, ":idCve", $_GET["idCVE"]);
 
           echo '<div class="container-fluid">';
 
@@ -163,6 +164,19 @@
           echo '<div class="row">';
           echo '<h3 class="col-md-2 editeur"><a href="editeur.php?idEditeur='.$cve[0]["idEditeur"].'">'.$cve[0]["nomEditeur"].'</a></h3>';
           echo '</div>';
+
+					if (!empty($listProduits))
+          {
+            echo '<div class="descriptionCve reference row">';
+            echo '<h3 class="titleDescription">Produits concernés : </h3>';
+
+            for ($i=0; $i < sizeof($listProduits); $i++)
+            {
+                echo '<li><a href="produit.php?idProduit='.$listProduits[$i]["idProduit"].'">'.$listProduits[$i]["nomProduit"].'</a></li>';
+            }
+
+            echo '</div>';
+          }
 
           echo '<div class="descriptionCve row">';
           echo '<h3 class="titleDescription">Description : </h3>';
