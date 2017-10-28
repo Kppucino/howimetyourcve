@@ -619,25 +619,26 @@
 			}
 	}
 
-	function getListEditeur($search)
+	function getListEditeurFailleProduit($search, $type)
 	{
 			include("SQLQuery.php");
 
 			if (!empty($search))
 			{
-					$listEditeur = queryFetchWith1Value($queryGetEditeurByName, ":nomEditeur", '%'.$search.'%');
-					createListEditeur($listEditeur);
-			}
-	}
+					if ($type == "editeur")
+					{
+						$list = queryFetchWith1Value($queryGetEditeurByName, ":nomEditeur", '%'.$search.'%');
+					}
+					else if($type == "produit")
+					{
+						$list = queryFetchWith1Value($queryGetProduitByName, ":nomProduit", '%'.$search.'%');
+					}
+					else if($type == "type")
+					{
+						$list = queryFetchWith1Value($queryGetFailleByName, ":nomFaille", '%'.$search.'%');
+					}
 
-	function getListFaille($search)
-	{
-			include("SQLQuery.php");
-
-			if (!empty($search))
-			{
-					$listFaille = queryFetchWith1Value($queryGetFailleByName, ":nomFaille", '%'.$search.'%');
-					createListFaille($listFaille);
+					createListEditeurFailleProduit($list, $type);
 			}
 	}
 
@@ -693,7 +694,7 @@
 					echo '<a href="cve.php?idCVE='.$listCVE[$i]["idCve"].'">';
 					echo '<span class="media-meta pull-right">'.formaterDate($listCVE[$i]["dateCve"]).'</span>';
 					echo '<h4 class="title">';
-					echo $listCVE[$i]["nomCve"];
+					echo $listCVE[$i]["nomCve"]. ' - '.$listCVE[$i]["nomEditeur"];
 
 					if ($listCVE[$i]["statusCve"] == 1)
 					{
@@ -736,12 +737,12 @@
 		echo '</tbody>';
 	}
 
-	function createListEditeur($listEditeur)
+	function createListEditeurFailleProduit($list, $type)
 	{
 		include("SQLQuery.php");
 		echo '<tbody>';
 
-		if (empty($listEditeur) || $listEditeur == "erreur")
+		if (empty($list) || $list == "erreur")
 		{
 				echo '<tr data-status="">';
 				echo '<td>';
@@ -760,83 +761,82 @@
 		}
 		else
 		{
-			for ($i=0; $i < sizeof($listEditeur); $i++)
+			if ($type == "editeur")
 			{
-					echo '<td>';
-					echo '<div class="media">';
+				for ($i=0; $i < sizeof($list); $i++)
+				{
+						echo '<td>';
+						echo '<div class="media">';
 
-					if (isset($listEditeur[$i]["logoEditeur"]))
-					{
-							echo '<a href="editeur.php?idEditeur='.$listEditeur[$i]["idEditeur"].'" class="pull-left">';
-							echo '<img src="images/logoEditeur/'.$listEditeur[$i]["logoEditeur"].'" class="media-photo"></img>';
-							echo '</a>';
-					}
+						if (isset($list[$i]["logoEditeur"]))
+						{
+								echo '<a href="editeur.php?idEditeur='.$list[$i]["idEditeur"].'" class="pull-left">';
+								echo '<img src="images/logoEditeur/'.$list[$i]["logoEditeur"].'" class="media-photo"></img>';
+								echo '</a>';
+						}
 
-					echo '<div class="media-body">';
-					echo '<a href="editeur.php?idEditeur='.$listEditeur[$i]["idEditeur"].'">';
-					echo '<h4 class="title">';
-					echo $listEditeur[$i]["nomEditeur"];
-					echo '</h4>';
-					echo '<p class="summary">'.substr($listEditeur[$i]["descriptionEditeur"], 0, 100).'</p>';
-					echo '</div>';
-					echo '</a>';
-					echo '</div>';
-					echo '<td>';
-					echo '</td>';
-					echo '</td>';
-					echo '</tr>';
+						echo '<div class="media-body">';
+						echo '<a href="editeur.php?idEditeur='.$list[$i]["idEditeur"].'">';
+						echo '<h4 class="title">';
+						echo $list[$i]["nomEditeur"];
+						echo '</h4>';
+						echo '<p class="summary">'.substr($list[$i]["descriptionEditeur"], 0, 100).'</p>';
+						echo '</div>';
+						echo '</a>';
+						echo '</div>';
+						echo '<td>';
+						echo '</td>';
+						echo '</td>';
+						echo '</tr>';
+				}
 			}
-		}
-		echo '</tbody>';
-	}
-
-	function createListFaille($listFaille)
-	{
-		include("SQLQuery.php");
-		echo '<tbody>';
-
-		if (empty($listFaille) || $listFaille == "erreur")
-		{
-				echo '<tr data-status="">';
-				echo '<td>';
-				echo '<div class="media">';
-				echo '<div class="media-body">';
-				echo '<span class="media-meta pull-right"></span>';
-				echo '<h4 class="title">';
-				echo 'Aucun résultat à afficher';
-				echo '<span class="pull-right pagado"></span>';
-				echo '</h4>';
-				echo '<p class="summary"></p>';
-				echo '</div>';
-				echo '</div>';
-				echo '</td>';
-				echo '</tr>';
-		}
-		else
-		{
-			for ($i=0; $i < sizeof($listFaille); $i++)
+			else if ($type == "produit")
 			{
-					echo '<td>';
-					echo '<div class="media">';
-					echo '<div class="media-body">';
-					echo '<a href="faille.php?idFaille='.$listFaille[$i]["idFaille"].'">';
-					echo '<h4 class="title">';
-					echo $listFaille[$i]["nomFaille"];
+				for ($i=0; $i < sizeof($list); $i++)
+				{
+						echo '<td>';
+						echo '<div class="media">';
+						echo '<div class="media-body">';
+						echo '<a href="produit.php?idProduit='.$list[$i]["idProduit"].'">';
+						echo '<h4 class="title">';
+						echo $list[$i]["nomProduit"].' - '.$list[$i]["nomEditeur"];
+						echo '</h4>';
+						echo '<p class="summary">'.substr($list[$i]["descriptionProduit"], 0, 100).'</p>';
+						echo '</div>';
+						echo '</a>';
+						echo '</div>';
+						echo '<td>';
+						echo '</td>';
+						echo '</td>';
+						echo '</tr>';
+				}
+			}
+			else if ($type == "faille")
+			{
+				for ($i=0; $i < sizeof($list); $i++)
+				{
+						echo '<td>';
+						echo '<div class="media">';
+						echo '<div class="media-body">';
+						echo '<a href="faille.php?idFaille='.$list[$i]["idFaille"].'">';
+						echo '<h4 class="title">';
+						echo $list[$i]["nomFaille"];
 
-					if (!empty($listFaille[$i]["nomType"]))
-					{
-							echo '<span class="pull-right">'.$listFaille[$i]["nomType"].'</span>';
-					}
+						if (!empty($list[$i]["nomType"]))
+						{
+								echo '<span class="pull-right">'.$list[$i]["nomType"].'</span>';
+						}
 
-					echo '</h4>';
-					echo '<p class="summary">'.substr($listFaille[$i]["descriptionFaille"], 0, 100).'</p>';
-					echo '</div>';
-					echo '</a>';
-					echo '</div>';
-					echo '<td>';
-					echo '</td>';
-					echo '</td>';
-					echo '</tr>';
+						echo '</h4>';
+						echo '<p class="summary">'.substr($list[$i]["descriptionFaille"], 0, 100).'</p>';
+						echo '</div>';
+						echo '</a>';
+						echo '</div>';
+						echo '<td>';
+						echo '</td>';
+						echo '</td>';
+						echo '</tr>';
+				}
 			}
 		}
 		echo '</tbody>';
@@ -1282,6 +1282,17 @@
 				return false;
 			}
 		}
+		else if ($type == "produit")
+		{
+			if (queryFetchWith1Value($queryGetNbProduitByName, ":nomProduit", '%'.$search.'%', $search)[0]["Nb"] != 0)
+			{
+					return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 		else if ($type == "faille")
 		{
 			if (queryFetchWith1Value($queryGetNbFailleByName, ":nomFaille", '%'.$search.'%', $search)[0]["Nb"] != 0)
@@ -1312,13 +1323,9 @@
 		{
 				getListCVE("", "", "", "", $idUser, $search);
 		}
-		else if ($type == "editeur")
+		else
 		{
-			getListEditeur($search);
-		}
-		else if ($type == "faille")
-		{
-			getListFaille($search);
+			getListEditeurFailleProduit($search, $type);
 		}
 	}
 

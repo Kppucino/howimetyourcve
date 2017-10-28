@@ -129,12 +129,18 @@ a:focus
 	background-color: #ffffff;
 	border-radius: 1em;
 	color : #494949;
+	padding-bottom: 0.5em;
 	margin-bottom: 2em;
 }
 
 .statPanel li
 {
 	padding-left: 1.5em;
+}
+
+.filtre div
+{
+	padding-bottom: 0.3em;
 }
 
 .control-label

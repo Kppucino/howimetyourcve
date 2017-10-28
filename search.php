@@ -51,6 +51,26 @@
           echo '</div>';
         }
 
+				if (searchForExist($search, "produit") == true)
+        {
+          echo '<div class="col-md-12">';
+          echo '<div class="panel panel-default">';
+          echo '<div class="panel-body">';
+          echo '<div class="filtre row">';
+          echo '<h3 class="col-md-12">Produit</h3>';
+          echo '</div>';
+          echo '<div class="table-container">';
+          echo '<table class="table table-filter table-produit">';
+
+          searchFor($search, "produit");
+
+          echo '</table>';
+          echo '</div>';
+          echo '</div>';
+          echo '</div>';
+          echo '</div>';
+        }
+
         if (searchForExist($search, "faille") == true)
         {
           echo '<div class="col-md-12">';

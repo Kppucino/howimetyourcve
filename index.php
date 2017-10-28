@@ -61,8 +61,8 @@
 						<div class="filtre">
 							<div class="col-md-3">
 								<div class="form-group">
-							    <label class="col-md-3 control-label" for="rolename">Editeur</label>
-							    <div class="col-md-5">
+							    <label class="col-md-4 control-label" for="rolename">Editeur</label>
+							    <div class="col-md-8">
 							        <select id="listEditor" class="multiselect-ui form-control" multiple="multiple">
 													<?php
 															$listEditor = queryFetchWithoutValue($queryGetEditeur);
@@ -78,8 +78,8 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-							    <label class="col-md-3 control-label" for="rolename">Faille</label>
-							    <div class="col-md-5">
+							    <label class="col-md-4 control-label" for="rolename">Faille</label>
+							    <div class="col-md-8">
 							        <select id="listFaille" class="multiselect-ui form-control" multiple="multiple">
 												<?php
 														$listFaille = queryFetchWithoutValue($queryGetFaille);
@@ -95,14 +95,14 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-							    <label class="col-md-3 control-label" for="rolename">Status</label>
-							    <div class="col-md-5">
+							    <label class="col-md-4 control-label" for="rolename">Status</label>
+							    <div class="col-md-8">
 							        <select id="listStatus" class="multiselect-ui form-control">
 												<option value="all">Toutes</option>
 												<option value="open">Ouvertes</option>
 												<option value="close">Fermées</option>
 												<?php
-													if(isset($_SESSION["idUser"]))
+													if(isset($_SESSION))
 													{
 														echo '<option value="favoris">Favoris</option>';
 													}
@@ -111,16 +111,12 @@
 							    </div>
 								</div>
 							</div>
-							<div class="col-md-1 row">
-								<div class="buttonFiltre">
-									<button class="btn btn-default"><i class="glyphicon glyphicon-filter"></i></button>
-								</div>
-							</div>
-							<div class="row">
+							<div class="col-md-offset-1 col-md-2 row">
 									<input type="hidden" value="0" name="page"></input>
+									<button class="btn btn-default buttonFiltre"><i class="glyphicon glyphicon-filter"></i></button>
 									<button class="btn btn-default previous"><i class="glyphicon glyphicon-chevron-left"></i></button>
 									<button class="btn btn-default next"><i class="glyphicon glyphicon-chevron-right"></i></button>
-							</div>
+								</div>
 						</div>
 						<div class="table-container">
 							<table class="table table-filter">

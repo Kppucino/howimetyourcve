@@ -74,7 +74,7 @@
   $queryUpdateEditeurWithPhoto = "UPDATE editeur SET nomEditeur = :nomEditeur, descriptionEditeur = :descriptionEditeur, logoEditeur = :logoEditeur WHERE idEditeur = :idEditeur";
   $queryUpdateEditeurWithoutPhoto = "UPDATE editeur SET nomEditeur = :nomEditeur, descriptionEditeur = :descriptionEditeur WHERE idEditeur = :idEditeur";
 
-  $queryGetFaille = "SELECT * FROM faille";
+  $queryGetFaille = "SELECT * FROM faille ORDER BY nomFaille";
   $queryGetRandFaille = "SELECT * FROM faille ORDER BY rand() LIMIT 7";
   $queryGetFailleAndTypeById = "SELECT * FROM faille, typefaille WHERE faille.idType = typeFaille.idType AND faille.idFaille = :idFaille";
   $queryGetCommentaireFailleUser = "SELECT * FROM link_faille_user WHERE idUser = :idUser AND idFaille = :idFaille";
@@ -105,8 +105,11 @@
 
   $queryGetNiveauById = "SELECT * FROM niveau WHERE idNiveau = :idNiveau";
 
+  $queryGetProduit = "SELECT * FROM produit ORDER BY nomProduit";
   $queryGetProduitById = "SELECT * FROM produit, link_cve_produit, cve, editeur WHERE produit.idProduit = :idProduit AND produit.idProduit = link_cve_produit.idProduit AND link_cve_produit.idCve = cve.idCve AND cve.idEditeur = editeur.idEditeur";
   $queryGetNbCveForProduit = "SELECT COUNT(idCve) AS Nb FROM link_cve_produit WHERE idProduit = :idProduit";
   $queryGetAVGCveForProduit  = "SELECT AVG(DISTINCT(cve.noteBaseCve)) AS Moyenne FROM cve, link_cve_produit WHERE link_cve_produit.idProduit = :idProduit AND link_cve_produit.idCve = cve.idCVE";
   $queryUpdateProduit = "UPDATE produit SET nomProduit = :nomProduit, descriptionProduit = :descriptionProduit WHERE idProduit = :idProduit";
+  $queryGetNbProduitByName = "SELECT COUNT(produit.idProduit) AS Nb FROM produit WHERE produit.nomProduit LIKE :nomProduit";
+  $queryGetProduitByName = "SELECT * FROM produit, link_cve_produit, editeur, cve WHERE produit.nomProduit LIKE :nomProduit AND produit.idProduit = link_cve_produit.idProduit AND link_cve_produit.idCve = cve.idCve AND cve.idEditeur = editeur.idEditeur ORDER BY nomProduit";
 ?>

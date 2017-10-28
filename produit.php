@@ -53,6 +53,16 @@
             echo '<p class="col-md-10 contenuDesc">'.$produit[0]["descriptionProduit"].'</p>';
             echo '</div>';
 					}
+
+            echo '<div class="descriptionCve reference row">';
+            echo '<h3 class="titleDescription">CVE concernées : </h3>';
+
+            for ($i=0; $i < sizeof($produit); $i++)
+            {
+                echo '<li><a href="cve.php?idCVE='.$produit[$i]["idCve"].'">'.$produit[$i]["nomCve"].'</a></li>';
+            }
+
+            echo '</div>';
         }
       }
 			include("footer.php");
